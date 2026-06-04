@@ -1,0 +1,14 @@
+{
+    "suwar": [
+        { "id": 1, "name": "الفاتحة", "makkia": 1 },
+        { "id": 2, "name": "البقرة", "makkia": 0 },
+        { "id": 3, "name": "آل عمران", "makkia": 0 },
+        { "id": 4, "name": "النساء", "makkia": 0 },
+        { "id": 5, "name": "المائدة", "makkia": 0 },
+        { "id": 6, "name": "الأنعام", "makkia": 1 },
+        { "id": 7, "name": "الأعراف", "makkia": 1 },
+        { "id": 8, "name": "الأنفال", "makkia": 0 },
+        { "id": 9, "name": "التوبة", "makkia": 0 },
+        { "id": 10, "name": "يونس", "makkia": 1 }
+    ]
+}
