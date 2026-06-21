@@ -1,50 +1,85 @@
 import SwiftUI
 
 struct ReciterPickerSheet: View {
-
-    let reciterViewModel: ReciterContainer.ViewModel
+    
+    @Bindable var reciterViewModel: ReciterContainer.ViewModel
     @Environment(\.dismiss) private var dismiss
-
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    
     var body: some View {
         Group {
             switch reciterViewModel.state {
             case .idle:
-                Text("No Reciters")
+                ContentUnavailableView("No Reciters", systemImage: "person")
             case .loading:
                 ProgressView()
-            case .loaded(let reciters):
-                List(reciters) { item in
-                    Button {
-                        reciterViewModel.select(item)
-                        dismiss()
-                    } label: {
-                        HStack {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(item.reciter.name)
-                                    .font(.headline)
-                                    .foregroundStyle(
-                                        reciterViewModel.isSelected(id: item.id) ? Color.yellow : .primary
-                                    )
-                                Text(item.moshaf.name)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                            Spacer()
-                            if reciterViewModel.isSelected(id: item.id) {
-                                Image(systemName: "checkmark")
-                                    .foregroundStyle(.tint)
+            case .loaded:
+                let reciters = reciterViewModel.filteredReciters
+                
+                NavigationStack{
+                    ScrollViewReader { proxy in
+                        if reciters.isEmpty {
+                            ContentUnavailableView {
+                                Label("No Reciter", systemImage: "person")
+                            } description: {
+                                Text("try different names")
                             }
                         }
-                    }
-                    .buttonStyle(.plain)
-                    .padding(.vertical, 4)
-                    .listRowBackground(Color.clear)
-                    .onTapGesture {
-                        reciterViewModel.select(item)
+                        List(reciters) { item in
+                            let isSelected = reciterViewModel.isSelected(
+                                id: item.id
+                            )
+                            Button {
+                                reciterViewModel.select(item)
+                                dismiss()
+                            } label: {
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(item.reciter.name)
+                                            .font(.headline)
+                                            .foregroundStyle(
+                                                isSelected
+                                                ? Color.selectedText : .primary
+                                            )
+                                        Text(item.moshaf.name)
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                    Spacer()
+                                    if isSelected {
+                                        Image(systemName: "checkmark")
+                                            .foregroundStyle(.selectedText)
+                                    }
+                                }
+                            }
+                            .buttonStyle(.plain)
+                            .padding(.vertical, 4)
+                            .listRowBackground(Color.clear)
+                        }
+                        .navigationTitle("Reciters")
+                        .navigationBarTitleDisplayMode(.inline)
+                        .scrollContentBackground(.hidden)
+                        .searchable(text: $reciterViewModel.query)
+                        .toolbar {
+                            ToolbarItem(placement: .topBarTrailing) {
+                                Button("Done",systemImage:"xmark"){
+                                    dismiss()
+                                }
+                                .labelStyle(.iconOnly)
+                                .font(.title)
+                            }
+                        }
+                        .onAppear {
+                            if reduceMotion {
+                                proxy.scrollTo(reciterViewModel.selected.id, anchor: .center)
+                            } else {
+                                withAnimation { proxy.scrollTo(reciterViewModel.selected.id, anchor: .center) }
+                            }
+                        }
+                        
                     }
                 }
-                .scrollContentBackground(.hidden)
-
+                
             case .error(let error):
                 Text("Error : \(error)")
             }
@@ -54,7 +89,6 @@ struct ReciterPickerSheet: View {
         }
     }
 }
-
 
 #Preview {
     ReciterPickerSheet(reciterViewModel: ReciterContainer.ViewModel())

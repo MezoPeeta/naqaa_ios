@@ -1,7 +1,19 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Bad Request" : {
+
+    },
+    "Could not find %@ in the app bundle" : {
+
+    },
+    "Done" : {
+
+    },
     "Error : %@" : {
+
+    },
+    "Failed to decode response: %@" : {
 
     },
     "Meccan" : {
@@ -23,6 +35,12 @@
           }
         }
       }
+    },
+    "Network Error: %@" : {
+
+    },
+    "No Reciter" : {
+
     },
     "No Reciters" : {
 
@@ -72,6 +90,15 @@
           }
         }
       }
+    },
+    "Reciters" : {
+
+    },
+    "The URL is invalid" : {
+
+    },
+    "try different names" : {
+
     },
     "versesCount" : {
       "extractionState" : "manual",

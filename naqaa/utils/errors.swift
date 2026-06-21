@@ -7,15 +7,15 @@ enum APIError: LocalizedError{
     var errorDescription: String?{
         switch self {
         case .invalidURL:
-            return "The Url is invalid"
+            return String(localized: "The URL is invalid")
         case .invalidRequest:
-            return "Bad Request"
+            return String(localized: "Bad Request")
         case .decoding(let error):
-            return "Failed to decode response: \(error.localizedDescription)"
+            return String(localized: "Failed to decode response: \(error.localizedDescription)")
         case .networkError(let error):
-            return "Network Error: \(error.localizedDescription)"
+            return String(localized: "Network Error: \(error.localizedDescription)")
         case .fileNotFound(let name):
-            return "Could not find \(name) in the app bundle"
+            return String(localized: "Could not find \(name) in the app bundle")
         }
     }
 }

@@ -6,7 +6,7 @@ struct HomeView: View {
     var body: some View {
         NavigationStack{
             ZStack(alignment: .top){
-                Color.accent.ignoresSafeArea()
+                Color.background.ignoresSafeArea()
                 ScrollView {
                     VStack(alignment: .leading){
                         HeaderView()

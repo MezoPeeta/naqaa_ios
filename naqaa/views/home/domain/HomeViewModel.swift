@@ -6,6 +6,7 @@ import Observation
 
 extension SurahListVIew{
     @Observable
+    @MainActor
     class ViewModel{
         enum State: Equatable{
             case idle, loading, loaded([Surah]),error(String)
@@ -23,9 +24,9 @@ extension SurahListVIew{
             guard !trimmed.isEmpty else { return surahs }
             
             return surahs.filter{ surah in
-                surah.displayName.localizedCaseInsensitiveContains(trimmed)
+                surah.displayName.localizedStandardContains(trimmed)
                 
-
+                
             }
             
             

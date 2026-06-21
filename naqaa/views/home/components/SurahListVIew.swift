@@ -8,30 +8,30 @@ struct SurahListVIew: View{
         Group {
             switch surahViewModel.state {
             case .idle:
-                Text("No Surahs")
+                ContentUnavailableView("No Surahs", systemImage: "book.closed")
             case .loading:
                 ProgressView()
-            case .loaded(let surahs):
+            case .loaded:
                 LazyVStack(alignment: .leading, spacing: 24) {
                     let surahs = surahViewModel.filteredSurahs
-                    ForEach(Array(surahs.enumerated()), id: \.element.id) { index, surah in
+                    ForEach(surahs.enumerated(), id: \.element.id) { index, surah in
                         
                         VStack(alignment: .leading, spacing: 4) {
                             Text(surah.displayName).font(.headline)
                                 .fontWeight(.semibold)
                             HStack {
                                 Text(LocalizedStringResource("versesCount", defaultValue: "\(surah.totalVerses) verses"))
-                                Divider().overlay(Color.white)
+                                Divider().overlay{Color.white}
                                 Text(surah.revelationPlace.label)
                                 
                             }
-                            .foregroundStyle(.secondary)
-                            .font(.system(size: 14))
+                            .foregroundStyle(Color.caption)
+                            .font(.caption)
                         }
                         
                         
                         if index < surahs.count - 1 {
-                            Divider().overlay(Color.white.opacity(0.4))
+                            Divider().overlay{Color.white.opacity(0.4)}
                         }
                         
                         
