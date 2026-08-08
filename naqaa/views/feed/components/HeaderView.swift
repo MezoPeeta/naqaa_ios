@@ -19,7 +19,8 @@ struct HeaderView: View {
                             Image(systemName: symbol)
                                 .frame(width: 50, height: 50)
                                 .glassEffect()
-                                .glassEffectUnion(id: "1", namespace: namespace)
+                                .glassEffectUnion(id: symbol, namespace: namespace)
+                                .accessibilityLabel(symbolAccessibilityLabel(for: symbol))
 
                         }
                     }
@@ -27,6 +28,14 @@ struct HeaderView: View {
 
             }
 
+        }
+    }
+
+    private func symbolAccessibilityLabel(for symbol: String) -> String {
+        switch symbol {
+        case "heart.fill": "Favorites"
+        case "gearshape": "Settings"
+        default: symbol
         }
     }
 }

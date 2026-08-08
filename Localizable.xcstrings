@@ -1,7 +1,13 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {
+
+    },
     "Bad Request" : {
+
+    },
+    "Buffering" : {
 
     },
     "Could not find %@ in the app bundle" : {
@@ -14,6 +20,15 @@
 
     },
     "Failed to decode response: %@" : {
+
+    },
+    "Favorites" : {
+
+    },
+    "Favorites View" : {
+
+    },
+    "Home" : {
 
     },
     "Meccan" : {
@@ -43,7 +58,14 @@
 
     },
     "No Reciters" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا يوجد قراء"
+          }
+        }
+      }
     },
     "No Surahs" : {
       "localizations" : {
@@ -55,7 +77,13 @@
         }
       }
     },
+    "Pause" : {
+
+    },
     "Peace be upon you" : {
+
+    },
+    "Play" : {
 
     },
     "reciter.default.moshaf" : {
@@ -92,13 +120,49 @@
       }
     },
     "Reciters" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "القرآء"
+          }
+        }
+      }
+    },
+    "Search" : {
+
+    },
+    "Selected" : {
+
+    },
+    "Settings" : {
+
+    },
+    "Settings View" : {
+
+    },
+    "Surahs" : {
 
     },
     "The URL is invalid" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اللينك غير صحيح"
+          }
+        }
+      }
     },
     "try different names" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جرب اسماء اخري"
+          }
+        }
+      }
     },
     "versesCount" : {
       "extractionState" : "manual",

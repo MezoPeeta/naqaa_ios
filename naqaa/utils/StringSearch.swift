@@ -1,16 +1,13 @@
 import Foundation
 
-extension String{
+extension String {
     func searchKey() -> String {
            let lower = self.lowercased()
-           // Strip separators / punctuation
            let separators = CharacterSet(charactersIn: " -'.,").union(.whitespaces)
            let noSep = lower.unicodeScalars
                .filter { !separators.contains($0) }
                .map { String($0) }.joined()
-           // NFD: decompose alef+hamza/madda into base alef + combining mark
            let decomposed = noSep.decomposedStringWithCanonicalMapping
-           // Drop combining marks (harakat + hamza/madda above/below)
            let stripped = decomposed.unicodeScalars
                .filter {
                    let cat = $0.properties.generalCategory

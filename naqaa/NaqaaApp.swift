@@ -9,10 +9,10 @@ import SwiftUI
 import SwiftData
 
 @main
-struct naqaaApp: App {
+struct NaqaaApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self,
+            Item.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

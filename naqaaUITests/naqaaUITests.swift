@@ -23,10 +23,14 @@ final class naqaaUITests: XCTestCase {
     }
 
     @MainActor
-    func testExample() throws {
+    func testSelectedReciter() throws {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
         app.launch()
+
+        app/*@START_MENU_TOKEN@*/.buttons["ابراهيم الأخضر‏، حفص عن عاصم - مرتل"]/*[[".buttons",".containing(.staticText, identifier: \"حفص عن عاصم - مرتل\")",".containing(.staticText, identifier: \"ابراهيم الأخضر\")",".otherElements.buttons[\"ابراهيم الأخضر‏، حفص عن عاصم - مرتل\"]",".buttons[\"ابراهيم الأخضر‏، حفص عن عاصم - مرتل\"]"],[[[-1,4],[-1,3],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
+        app/*@START_MENU_TOKEN@*/.buttons["ماهر المعيقلي‏، حفص عن عاصم - مرتل"].staticTexts["ماهر المعيقلي"].firstMatch/*[[".staticTexts.matching(identifier: \"ماهر المعيقلي\").element(boundBy: 2)",".buttons[\"ماهر المعيقلي‏، حفص عن عاصم - مرتل\"].staticTexts[\"ماهر المعيقلي\"].firstMatch"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        XCTAssert(app/*@START_MENU_TOKEN@*/.staticTexts["ماهر المعيقلي"]/*[[".buttons.staticTexts[\"ماهر المعيقلي\"]",".staticTexts[\"ماهر المعيقلي\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.firstMatch.exists)
 
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         // XCUIAutomation Documentation

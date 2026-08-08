@@ -1,11 +1,12 @@
 import SwiftUI
 
 struct ReciterPickerSheet: View {
-    
+
     @Bindable var reciterViewModel: ReciterContainer.ViewModel
+    var playerState: PlayerState
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    
+
     var body: some View {
         Group {
             switch reciterViewModel.state {
@@ -15,8 +16,8 @@ struct ReciterPickerSheet: View {
                 ProgressView()
             case .loaded:
                 let reciters = reciterViewModel.filteredReciters
-                
-                NavigationStack{
+
+                NavigationStack {
                     ScrollViewReader { proxy in
                         if reciters.isEmpty {
                             ContentUnavailableView {
@@ -31,6 +32,7 @@ struct ReciterPickerSheet: View {
                             )
                             Button {
                                 reciterViewModel.select(item)
+                                playerState.selectReciter(item)
                                 dismiss()
                             } label: {
                                 HStack {
@@ -62,7 +64,7 @@ struct ReciterPickerSheet: View {
                         .searchable(text: $reciterViewModel.query)
                         .toolbar {
                             ToolbarItem(placement: .topBarTrailing) {
-                                Button("Done",systemImage:"xmark"){
+                                Button("Done", systemImage: "xmark") {
                                     dismiss()
                                 }
                                 .labelStyle(.iconOnly)
@@ -76,10 +78,10 @@ struct ReciterPickerSheet: View {
                                 withAnimation { proxy.scrollTo(reciterViewModel.selected.id, anchor: .center) }
                             }
                         }
-                        
+
                     }
                 }
-                
+
             case .error(let error):
                 Text("Error : \(error)")
             }
@@ -91,5 +93,8 @@ struct ReciterPickerSheet: View {
 }
 
 #Preview {
-    ReciterPickerSheet(reciterViewModel: ReciterContainer.ViewModel())
+    ReciterPickerSheet(
+        reciterViewModel: ReciterContainer.ViewModel(),
+        playerState: PlayerState()
+    )
 }

@@ -1,10 +1,9 @@
 import Foundation
 
-
-enum APIError: LocalizedError{
+enum APIError: LocalizedError {
     case invalidURL, invalidRequest, decoding(Error), networkError(Error), fileNotFound(String)
 
-    var errorDescription: String?{
+    var errorDescription: String? {
         switch self {
         case .invalidURL:
             return String(localized: "The URL is invalid")

@@ -3,6 +3,7 @@ import SwiftUI
 struct ReciterContainer: View {
     @State private var showReciterShown = false
     @State private var reciterViewModel = ViewModel()
+    let playerState: PlayerState
 
     var body: some View {
         Button {
@@ -19,20 +20,21 @@ struct ReciterContainer: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .contentShape(RoundedRectangle(cornerRadius: 16))
 
-            
-
         }
         .buttonStyle(.plain)
         .glassEffect(
             in: RoundedRectangle(cornerRadius: 16)
         )
         .sheet(isPresented: $showReciterShown) {
-            ReciterPickerSheet(reciterViewModel: reciterViewModel)
+            ReciterPickerSheet(
+                reciterViewModel: reciterViewModel,
+                playerState: playerState
+            )
         }
 
     }
 }
 
 #Preview {
-    ReciterContainer()
+    ReciterContainer(playerState: PlayerState())
 }

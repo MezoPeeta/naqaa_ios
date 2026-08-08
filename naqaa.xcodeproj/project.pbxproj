@@ -34,9 +34,22 @@
 		BA9D02772FB7D74F00B23EAC /* naqaaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = naqaaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		BA259A8B300EAF5900DB19C5 /* Exceptions for "naqaa" folder in "naqaa" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = BA9D025D2FB7D74E00B23EAC /* naqaa */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		BA9D02602FB7D74E00B23EAC /* naqaa */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				BA259A8B300EAF5900DB19C5 /* Exceptions for "naqaa" folder in "naqaa" target */,
+			);
 			path = naqaa;
 			sourceTree = "<group>";
 		};
@@ -112,6 +125,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				BA95EB67300B029C00CEDCC7 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				BA9D02602FB7D74E00B23EAC /* naqaa */,
@@ -202,6 +216,9 @@
 			);
 			mainGroup = BA9D02552FB7D74E00B23EAC;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				BA95EB65300ADF0A00CEDCC7 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = BA9D025F2FB7D74E00B23EAC /* Products */;
 			projectDirPath = "";
@@ -264,6 +281,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		BA95EB67300B029C00CEDCC7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = BA95EB66300B029C00CEDCC7 /* SwiftLintBuildToolPlugin */;
+		};
 		BA9D026F2FB7D74F00B23EAC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BA9D025D2FB7D74E00B23EAC /* naqaa */;
@@ -407,6 +428,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = naqaa/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Naqaa;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -440,6 +462,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = naqaa/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Naqaa;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -584,6 +607,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		BA95EB65300ADF0A00CEDCC7 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.65.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		BA95EB66300B029C00CEDCC7 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BA95EB65300ADF0A00CEDCC7 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BA9D02562FB7D74E00B23EAC /* Project object */;
 }
