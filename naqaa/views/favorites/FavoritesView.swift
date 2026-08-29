@@ -9,15 +9,15 @@ import SwiftUI
 
 struct FavoritesView: View {
     var body: some View {
-        NavigationStack{
-            ZStack{
+        NavigationStack {
+            ZStack {
                 Color.favoritesBackground.ignoresSafeArea()
-                
+
                 ContentUnavailableView("No favorites now", systemImage: "heart.fill")
             }
             .navigationTitle("Favorites")
         }
-      
+
     }
 }
 

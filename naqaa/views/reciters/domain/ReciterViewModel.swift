@@ -109,6 +109,41 @@ extension ReciterMoshafItem {
 
         )
     }
+
+    var formattedMoshafName: String {
+        var name = moshaf.name.replacingOccurrences(of: "A'n", with: "An")
+        name = name.replacingOccurrences(
+            of: #"^\s*Rewayat\s+"#,
+            with: "",
+            options: .regularExpression
+        )
+        name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        switch name.lowercased() {
+        case "حفص":
+            name = "حفص عن عاصم - مرتل"
+        case "hafs":
+            name = "Hafs An Assem - Murattel"
+        default:
+            break
+        }
+
+        let parts = name.components(separatedBy: " - ")
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .filter { !$0.isEmpty }
+        var seen = Set<String>()
+        let deduped = parts.filter { seen.insert($0.lowercased()).inserted }
+        guard let first = deduped.first else { return "" }
+        let styleKeywords = [
+            "مرتل", "مجود", "معلم", "مميزة",
+            "murattal", "mojawwad", "mo'lim", "mualim",
+        ]
+        let styles = deduped.dropFirst().filter { part in
+            let lower = part.lowercased()
+            return styleKeywords.contains { lower.contains($0) }
+        }
+        return ([first] + styles).joined(separator: " - ")
+    }
 }
 
 extension ReciterViewModel {

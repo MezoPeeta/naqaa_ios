@@ -5,8 +5,9 @@ struct PlayerBottom: View {
     var body: some View {
         HStack(alignment: .center, spacing: 16) {
             VStack(alignment: .leading) {
-                Text(playerState.selectedSurah?.displayName ?? "DF")
+                Text(playerState.selectedSurah?.displayName ?? "")
                     .font(.subheadline)
+                    .bold()
                 Text(playerState.selectedReciter.reciter.name)
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -31,7 +32,7 @@ struct PlayerBottom: View {
             .disabled(!playerState.canPlayNext)
         }
         .buttonStyle(.plain)
-        .padding(.horizontal, 16)
+        .padding(.horizontal, 22)
 
     }
 }

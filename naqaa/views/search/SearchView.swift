@@ -13,24 +13,25 @@ struct SearchView: View {
     @State private var selected = 0
     @State private var query = ""
     var body: some View {
-        NavigationStack{
-            ZStack{
+        NavigationStack {
+            ZStack {
                 Color.background.ignoresSafeArea()
-                ScrollView{
-                    VStack(alignment:.leading){
+                ScrollView {
+                    VStack(alignment: .leading) {
                         Picker("Search", selection: $selected) {
                             Text("Surahs").tag(0)
                             Text("Reciters").tag(1)
                         }
                         .pickerStyle(.segmented)
                         Spacer(minLength: 30)
-                        
+
                         if selected == 1 {
-                            
+
                             ReciterListView(
                                 reciterViewModel: reciterViewModel,
                                 playerState: playerState,
-                                query: query
+                                query: query,
+                                hidesNavigationBar: true
                             )
 
                         } else {
@@ -43,9 +44,9 @@ struct SearchView: View {
                     .padding(16)
                 }
             }
-       
+
         }
-       
+
         .searchable(text: $query)
 
     }

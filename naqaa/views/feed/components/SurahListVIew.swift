@@ -18,7 +18,7 @@ struct SurahListVIew: View {
                     ForEach(surahs.enumerated(), id: \.element.id) {
                         index,
                         surah in
-                        let isSelected = surahViewModel.isSelected(id: surah.id)
+                        let isSelected = playerState.selectedSurah?.id == surah.id
                         Button {
                             playerState.play(surah)
                             surahViewModel.selectedSurah = surah
@@ -26,7 +26,9 @@ struct SurahListVIew: View {
                             VStack(alignment: .leading, spacing: 4) {
                                 HStack {
                                     VStack(alignment: .leading) {
-                                        Text(surah.displayName).font(.headline)
+                                        Text(surah.displayName)
+                                            .font(.headline)
+                                            .foregroundStyle(isSelected ? Color.selectedText : .primary)
                                         HStack(alignment: .center) {
                                             Text(
                                                 LocalizedStringResource(
@@ -45,7 +47,8 @@ struct SurahListVIew: View {
                                     }
                                     Spacer()
                                     DirectionalImage(isSelected ? "waveform" : "play")
-                                        .font(.system(size: 22))
+                                        .font(.system(size: 18))
+                                        .foregroundStyle(isSelected ? Color.selectedText : Color.primary)
                                         .symbolEffect(
                                             .variableColor.cumulative,
                                             options: .repeating,

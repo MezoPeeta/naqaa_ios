@@ -35,8 +35,9 @@ struct HomeView: View {
                 .transition(.move(edge: .bottom))
             
         }
-        .tint(.selectedText)
+        .tabBarMinimizeBehavior(.onScrollDown)
         
+        .tint(.selectedText)
         
     }
 }

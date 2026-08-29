@@ -184,6 +184,7 @@
       }
     },
     "Surahs -114-" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -280,15 +281,6 @@
           }
         }
       }
-    },
-    "المنشاوي" : {
-
-    },
-    "حفص عن عاصم" : {
-
-    },
-    "محمد صديق" : {
-
     }
   },
   "version" : "1.2"

@@ -5,6 +5,7 @@ struct ReciterListView: View {
     let playerState: PlayerState
     var query = ""
     var onSelect: ((ReciterMoshafItem) -> Void)?
+    var hidesNavigationBar = false
 
     var body: some View {
         Group {
@@ -15,7 +16,7 @@ struct ReciterListView: View {
                 ProgressView()
                     .frame(maxWidth: .infinity)
             case .loaded:
-                let reciters = reciterViewModel.filteredReciters(for: query)
+                let reciters = reciterViewModel.filteredReciters(for: query.isEmpty ? reciterViewModel.query : query)
                 if reciters.isEmpty {
                     ContentUnavailableView(
                         "No Reciters Found",
@@ -38,7 +39,7 @@ struct ReciterListView: View {
                                                 reciterViewModel.isSelected(id: item.id)
                                                     ? Color.selectedText : .primary
                                             )
-                                        Text(item.moshaf.name)
+                                        Text(item.formattedMoshafName)
                                             .font(.caption)
                                             .foregroundStyle(.secondary)
                                     }
@@ -69,7 +70,7 @@ struct ReciterListView: View {
         .task {
             await reciterViewModel.load()
         }
-        .toolbar(.hidden, for: .navigationBar)
+        .toolbar(hidesNavigationBar ? .hidden : .visible, for: .navigationBar)
 
     }
 }

@@ -17,14 +17,14 @@ struct FeedView: View {
                                 topSafeInset: proxy.safeAreaInsets.top
                             )
 
-                            VStack(alignment: .leading){
-                                Text("Surahs -114-")
+                            VStack(alignment: .leading) {
+                                Text("Surahs")
                                     .foregroundStyle(.gray)
                                     .font(.default)
                                     .bold()
                                 Spacer(minLength: 16)
                                 SurahListVIew(playerState: playerState)
-                                   
+
                             }
                             .padding(20)
 
