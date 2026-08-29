@@ -2,25 +2,20 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var playerState = PlayerState()
-
+    @State private var reciterViewModel = ReciterViewModel()
+    
     var body: some View {
         TabView {
             Tab("Home", systemImage: "house") {
-
+                
                 VStack(spacing: 0) {
-                    FeedView(playerState: playerState)
-                        .clipShape(
-                            UnevenRoundedRectangle(
-                                topLeadingRadius: 0,
-                                bottomLeadingRadius: 48,
-                                bottomTrailingRadius: 48,
-                                topTrailingRadius: 0
-                            )
-                        )
-                        .ignoresSafeArea()
-
+                    FeedView(
+                        reciterViewModel: reciterViewModel,
+                        playerState: playerState
+                    )
+                    
                 }
-                .animation(.spring(response: 0.35, dampingFraction: 0.85), value: playerState.selectedSurah)
+                
             }
             Tab("Favorites", systemImage: "heart") {
                 FavoritesView()
@@ -29,17 +24,20 @@ struct HomeView: View {
                 SettingsView()
             }
             Tab(role: .search) {
-                SearchView(playerState: playerState)
+                SearchView(
+                    reciterViewModel: reciterViewModel,
+                    playerState: playerState
+                )
             }
         }
         .tabViewBottomAccessory {
             PlayerBottom(playerState: playerState)
                 .transition(.move(edge: .bottom))
-
+            
         }
         .tint(.selectedText)
-
-
+        
+        
     }
 }
 

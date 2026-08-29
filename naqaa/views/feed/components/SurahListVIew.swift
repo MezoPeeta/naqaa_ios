@@ -3,6 +3,7 @@ import SwiftUI
 struct SurahListVIew: View {
     @State private var surahViewModel = SurahListViewModel()
     let playerState: PlayerState
+    var query = ""
 
     var body: some View {
         Group {
@@ -13,7 +14,7 @@ struct SurahListVIew: View {
                 ProgressView()
             case .loaded:
                 LazyVStack(alignment: .leading, spacing: 24) {
-                    let surahs = surahViewModel.filteredSurahs
+                     let surahs = surahViewModel.filteredSurahs(for: query)
                     ForEach(surahs.enumerated(), id: \.element.id) {
                         index,
                         surah in
@@ -43,11 +44,14 @@ struct SurahListVIew: View {
                                         .font(.caption)
                                     }
                                     Spacer()
-                                    if isSelected {
-                                        Image(systemName: "scribble")
-                                            .font(.system(size: 22))
-                                            .accessibilityLabel("Selected")
-                                    }
+                                    DirectionalImage(isSelected ? "waveform" : "play")
+                                        .font(.system(size: 22))
+                                        .symbolEffect(
+                                            .variableColor.cumulative,
+                                            options: .repeating,
+                                            isActive: isSelected
+                                        )
+                                        .accessibilityLabel(isSelected ? "Playing" : "Play")
 
                                 }
 

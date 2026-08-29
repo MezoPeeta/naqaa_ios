@@ -5,7 +5,8 @@ struct PlayerBottom: View {
     var body: some View {
         HStack(alignment: .center, spacing: 16) {
             VStack(alignment: .leading) {
-                Text(playerState.selectedSurah?.displayName ?? "")
+                Text(playerState.selectedSurah?.displayName ?? "DF")
+                    .font(.subheadline)
                 Text(playerState.selectedReciter.reciter.name)
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -18,14 +19,16 @@ struct PlayerBottom: View {
                 if playerState.isBuffering {
                     ProgressView()
                 } else {
-                    Image(systemName: playerState.isPlaying ? "pause.fill" : "play.fill")
+                    DirectionalImage(playerState.isPlaying ? "pause.fill" : "play.fill")
                 }
             }
             .accessibilityLabel(playerState.isBuffering ? "Buffering" : (playerState.isPlaying ? "Pause" : "Play"))
             .disabled(playerState.selectedSurah == nil)
 
-            Button("", systemImage: "forward.fill", action: playerState.playNext)
-                .disabled(!playerState.canPlayNext)
+            Button(action: playerState.playNext) {
+                DirectionalImage("forward.fill")
+            }
+            .disabled(!playerState.canPlayNext)
         }
         .buttonStyle(.plain)
         .padding(.horizontal, 16)

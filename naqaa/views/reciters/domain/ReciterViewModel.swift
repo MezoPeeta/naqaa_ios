@@ -1,10 +1,9 @@
 import Foundation
 import Observation
 
-extension ReciterContainer {
-    @MainActor
-    @Observable
-    class ViewModel {
+@MainActor
+@Observable
+final class ReciterViewModel {
 
         var query = ""
 
@@ -27,6 +26,10 @@ extension ReciterContainer {
         }
 
         var filteredReciters: [ReciterMoshafItem] {
+            filteredReciters(for: query)
+        }
+
+        func filteredReciters(for query: String) -> [ReciterMoshafItem] {
             guard case .loaded(let reciters) = state else { return [] }
             let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !trimmed.isEmpty else { return reciters }
@@ -80,7 +83,6 @@ extension ReciterContainer {
             }
         }
 
-    }
 }
 
 extension ReciterMoshafItem {
@@ -89,18 +91,18 @@ extension ReciterMoshafItem {
             id: "1-1",
             reciter: Reciter(
                 id: 1,
-                name: ReciterContainer.ViewModel.defaultReciterName,
+                name: ReciterViewModel.defaultReciterName,
                 letter: "M",
                 moshaf: [Moshaf(
                     id: 1,
-                    name: ReciterContainer.ViewModel.defaultMoshafName,
+                    name: ReciterViewModel.defaultMoshafName,
                     server: "https://server6.mp3quran.net/akdr/",
 
                 )]
             ),
             moshaf: Moshaf(
                 id: 1,
-                name: ReciterContainer.ViewModel.defaultMoshafName,
+                name: ReciterViewModel.defaultMoshafName,
                 server: "https://server6.mp3quran.net/akdr/",
 
             )
@@ -109,7 +111,7 @@ extension ReciterMoshafItem {
     }
 }
 
-extension ReciterContainer.ViewModel {
+extension ReciterViewModel {
     static var defaultReciterName: String {
         String(localized: "reciter.default.name")
     }

@@ -8,35 +8,52 @@
 import SwiftUI
 
 struct SearchView: View {
+    @Bindable var reciterViewModel: ReciterViewModel
     let playerState: PlayerState
-    @State private var query = ""
     @State private var selected = 0
+    @State private var query = ""
     var body: some View {
         NavigationStack{
-            ScrollView{
-                VStack(alignment:.leading){
-                    Picker("Search", selection: $selected) {
-                        Text("Surahs").tag(0)
-                        Text("Reciters").tag(1)
+            ZStack{
+                Color.background.ignoresSafeArea()
+                ScrollView{
+                    VStack(alignment:.leading){
+                        Picker("Search", selection: $selected) {
+                            Text("Surahs").tag(0)
+                            Text("Reciters").tag(1)
+                        }
+                        .pickerStyle(.segmented)
+                        Spacer(minLength: 30)
+                        
+                        if selected == 1 {
+                            
+                            ReciterListView(
+                                reciterViewModel: reciterViewModel,
+                                playerState: playerState,
+                                query: query
+                            )
+
+                        } else {
+                            SurahListVIew(
+                                playerState: playerState,
+                                query: query
+                            )
+                        }
                     }
-                    .pickerStyle(.segmented)
-                    Spacer(minLength: 30)
-                    
-                    SurahListVIew(playerState: playerState)
+                    .padding(16)
                 }
-                .padding(16)
             }
+       
         }
        
         .searchable(text: $query)
-        
-        
-        
-        
-        
+
     }
 }
 
 #Preview {
-    SearchView(playerState: PlayerState())
+    SearchView(
+        reciterViewModel: ReciterViewModel(),
+        playerState: PlayerState()
+    )
 }

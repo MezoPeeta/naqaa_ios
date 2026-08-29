@@ -9,7 +9,18 @@ import SwiftUI
 
 struct SettingsView: View {
     var body: some View {
-        Text("Settings View")
+        NavigationStack{
+            ZStack{
+                Color.settingsBackground.ignoresSafeArea()
+                VStack{
+                    Text("Asd")
+                }
+                
+                
+            }.navigationTitle("Settings")
+        }
+        
+        
     }
 }
 

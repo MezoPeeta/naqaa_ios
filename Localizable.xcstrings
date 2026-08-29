@@ -1,7 +1,10 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "" : {
+    "•" : {
+
+    },
+    "Asd" : {
 
     },
     "Bad Request" : {
@@ -16,20 +19,28 @@
     "Done" : {
 
     },
-    "Error : %@" : {
-
-    },
     "Failed to decode response: %@" : {
 
     },
     "Favorites" : {
-
-    },
-    "Favorites View" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المفضلات"
+          }
+        }
+      }
     },
     "Home" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الرئيسية"
+          }
+        }
+      }
     },
     "Meccan" : {
       "localizations" : {
@@ -54,10 +65,20 @@
     "Network Error: %@" : {
 
     },
-    "No Reciter" : {
+    "No favorites now" : {
 
     },
     "No Reciters" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا يوجد قراء"
+          }
+        }
+      }
+    },
+    "No Reciters Found" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -84,6 +105,9 @@
 
     },
     "Play" : {
+
+    },
+    "Playing" : {
 
     },
     "reciter.default.moshaf" : {
@@ -130,19 +154,44 @@
       }
     },
     "Search" : {
-
-    },
-    "Selected" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "البحث"
+          }
+        }
+      }
     },
     "Settings" : {
-
-    },
-    "Settings View" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الاعدادات"
+          }
+        }
+      }
     },
     "Surahs" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "السور"
+          }
+        }
+      }
+    },
+    "Surahs -114-" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "السور -١١٤-"
+          }
+        }
+      }
     },
     "The URL is invalid" : {
       "localizations" : {
@@ -154,12 +203,15 @@
         }
       }
     },
-    "try different names" : {
+    "Try a different name" : {
+
+    },
+    "Unable to Load Reciters" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "جرب اسماء اخري"
+            "value" : "حاول من جديد"
           }
         }
       }
@@ -228,6 +280,15 @@
           }
         }
       }
+    },
+    "المنشاوي" : {
+
+    },
+    "حفص عن عاصم" : {
+
+    },
+    "محمد صديق" : {
+
     }
   },
   "version" : "1.2"
