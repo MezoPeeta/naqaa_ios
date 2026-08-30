@@ -27,7 +27,7 @@ struct HomeView: View {
                 )
             }
         }
-        .tabViewBottomAccessory {
+        .tabViewBottomAccessory(isEnabled: playerState.selectedSurah != nil) {
             PlayerBottom(playerState: playerState)
                 .transition(.move(edge: .bottom))
         }
