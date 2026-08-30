@@ -38,13 +38,13 @@ final class SurahListViewModel {
         selectedSurah?.id == id
     }
 
-    func loadLocal() {
+    func loadLocal(bundle: Bundle = .main) {
         guard state == .idle else { return }
 
         state = .loading
 
         do {
-            let url = Bundle.main.url(forResource: "surahs", withExtension: "json")
+            let url = bundle.url(forResource: "surahs", withExtension: "json")
             guard let url else { throw APIError.fileNotFound("surahs.json") }
 
             let data = try Data(contentsOf: url)

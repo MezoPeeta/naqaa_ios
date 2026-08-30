@@ -17,9 +17,9 @@ extension String {
                }
                .map { String($0) }.joined()
            var arabic = stripped
-           for (from, to) in [("ة", "ه"), ("ى", "ي"), ("ـ", "")] {
-               arabic = arabic.replacingOccurrences(of: from, with: to)
-           }
+for (from, target) in [("ة", "ه"), ("ى", "ي"), ("ـ", "")] {
+                arabic = arabic.replacingOccurrences(of: from, with: target)
+            }
            // Latin consonant skeleton: drop vowels
            let vowels = CharacterSet(charactersIn: "aeiou")
            let skeleton = arabic.unicodeScalars

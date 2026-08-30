@@ -32,8 +32,7 @@ struct ReciterPickerSheet: View {
                                 .labelStyle(.iconOnly)
                                 .font(.title)
                             }
-                        
-                     
+
                 }
             }
         }

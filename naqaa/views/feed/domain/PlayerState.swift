@@ -8,18 +8,22 @@ final class PlayerState {
     var selectedReciter: ReciterMoshafItem = .defaultItem
     var surahs: [Surah] = []
 
-    let player = AudioPlayerManager()
+    let player: any AudioPlaying
 
     var isPlaying: Bool { player.isPlaying }
     var isBuffering: Bool { player.isBuffering }
 
-    var canPlayNext: Bool { nextSurah(after: selectedSurah) != nil }
-    var canPlayPrevious: Bool { previousSurah(before: selectedSurah) != nil }
+    private var queue: SurahQueue { SurahQueue(surahs: surahs) }
 
-    init() {
-        player.onTrackEnded = { [weak self] in self?.playNext() }
-        player.onNextTrack = { [weak self] in self?.playNext() }
-        player.onPreviousTrack = { [weak self] in self?.playPrevious() }
+    var canPlayNext: Bool { queue.next(after: selectedSurah) != nil }
+    var canPlayPrevious: Bool { queue.previous(before: selectedSurah) != nil }
+
+    init(player: (any AudioPlaying)? = nil) {
+        var resolved: any AudioPlaying = player ?? AudioPlayerManager()
+        self.player = resolved
+        resolved.onTrackEnded = { [weak self] in self?.playNext() }
+        resolved.onNextTrack = { [weak self] in self?.playNext() }
+        resolved.onPreviousTrack = { [weak self] in self?.playPrevious() }
     }
 
     func play(_ surah: Surah) {
@@ -39,27 +43,12 @@ final class PlayerState {
     }
 
     func playNext() {
-        guard let next = nextSurah(after: selectedSurah) else { return }
+        guard let next = queue.next(after: selectedSurah) else { return }
         play(next)
     }
 
     func playPrevious() {
-        guard let previous = previousSurah(before: selectedSurah) else { return }
+        guard let previous = queue.previous(before: selectedSurah) else { return }
         play(previous)
-    }
-
-    private func nextSurah(after surah: Surah?) -> Surah? {
-        guard let index = currentIndex(of: surah), index + 1 < surahs.count else { return nil }
-        return surahs[index + 1]
-    }
-
-    private func previousSurah(before surah: Surah?) -> Surah? {
-        guard let index = currentIndex(of: surah), index > 0 else { return nil }
-        return surahs[index - 1]
-    }
-
-    private func currentIndex(of surah: Surah?) -> Int? {
-        guard let surah else { return nil }
-        return surahs.firstIndex(where: { $0.id == surah.id })
     }
 }

@@ -12,7 +12,7 @@ struct ReciterContainer: View {
             Spacer(minLength: 0)
 
             VStack(spacing: 20) {
-                let parts = splitReciterName(playerState.selectedReciter.reciter.name)
+                let parts = ReciterNameParser.split(playerState.selectedReciter.reciter.name)
                 if let last = parts.last {
                     Text(parts.first)
                         .font(.system(size: 18))
@@ -45,7 +45,9 @@ struct ReciterContainer: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 56)
                     .frame(maxWidth: .infinity)
-                Button(action: { showReciterShown = true }) {
+                Button {
+                    showReciterShown = true
+                } label: {
                     DirectionalImage("chevron.right", rtl: "chevron.left")
                 }
                 .foregroundStyle(.white)
@@ -73,23 +75,18 @@ struct ReciterContainer: View {
         ))
         .sheet(
             isPresented: $showReciterShown,
-            onDismiss: { reciterViewModel.query = "" }
-        ) {
-            ReciterPickerSheet(
-                reciterViewModel: reciterViewModel,
-                playerState: playerState
-            )
-            .presentationDetents([.large])
-        }
+            onDismiss: { reciterViewModel.query = "" },
+            content: {
+                ReciterPickerSheet(
+                    reciterViewModel: reciterViewModel,
+                    playerState: playerState
+                )
+                .presentationDetents([.large])
+            }
+        )
 
     }
 
-    private func splitReciterName(_ name: String) -> (first: String, last: String?) {
-        let sanitized = name.replacingOccurrences(of: "Al-", with: "Al")
-        let components = sanitized.split(separator: " ").map(String.init)
-        guard components.count > 1, let last = components.last else { return (sanitized, nil) }
-        return (components.dropLast().joined(separator: " "), last)
-    }
 }
 
 #Preview {

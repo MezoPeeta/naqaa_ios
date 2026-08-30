@@ -15,9 +15,7 @@ struct SurahListVIew: View {
             case .loaded:
                 LazyVStack(alignment: .leading, spacing: 24) {
                      let surahs = surahViewModel.filteredSurahs(for: query)
-                    ForEach(surahs.enumerated(), id: \.element.id) {
-                        index,
-                        surah in
+                    ForEach(surahs.enumerated(), id: \.element.id) { index, surah in
                         let isSelected = playerState.selectedSurah?.id == surah.id
                         Button {
                             playerState.play(surah)

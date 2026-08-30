@@ -75,8 +75,7 @@ final class AudioPlayerManager {
     }
 
     private func observe(player: AVPlayer) {
-        statusObservation = player.observe(\.timeControlStatus, options: [.new]) {
-            [weak self] player, _ in
+        statusObservation = player.observe(\.timeControlStatus, options: [.new]) { [weak self] player, _ in
             let status = player.timeControlStatus
             Task { @MainActor in
                 self?.handleStatus(status)
@@ -179,8 +178,7 @@ final class AudioPlayerManager {
     private func setupRemoteCommands() {
         let center = MPRemoteCommandCenter.shared()
 
-        let toggleHandler: (MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus = {
-            [weak self] _ in
+        let toggleHandler: (MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus = { [weak self] _ in
             MainActor.assumeIsolated {
                 self?.togglePlayPause()
             }

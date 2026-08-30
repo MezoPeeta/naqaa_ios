@@ -46,19 +46,27 @@ final class ReciterViewModel {
             return exact + fuzzy
         }
 
-        private let endpoint: URL = {
+        private let session: URLSession
+        private let endpoint: URL
+
+        init(session: URLSession = .shared, endpoint: URL? = nil) {
+            self.session = session
+            self.endpoint = endpoint ?? Self.defaultEndpoint
+        }
+
+        private static var defaultEndpoint: URL {
             let code = Locale.current.language.languageCode?.identifier ?? "en"
             return URL(
                 string: "https://mp3quran.net/api/v3/reciters?language=\(code)"
             )!
-        }()
+        }
 
         func load() async {
             guard state == .idle else { return }
             state = .loading
 
             do {
-                let (data, response) = try await URLSession.shared.data(
+                let (data, response) = try await session.data(
                     from: endpoint
                 )
 
@@ -134,15 +142,23 @@ extension ReciterMoshafItem {
         var seen = Set<String>()
         let deduped = parts.filter { seen.insert($0.lowercased()).inserted }
         guard let first = deduped.first else { return "" }
+        let normalizedFirst: String
+        if first.lowercased().contains("warsh") {
+            normalizedFirst = "Warsh An Nafi'"
+        } else if first.contains("ورش") {
+            normalizedFirst = "ورش عن نافع"
+        } else {
+            normalizedFirst = first
+        }
         let styleKeywords = [
             "مرتل", "مجود", "معلم", "مميزة",
-            "murattal", "mojawwad", "mo'lim", "mualim",
+            "murattal", "murattel", "mojawwad", "mo'lim", "mualim"
         ]
         let styles = deduped.dropFirst().filter { part in
             let lower = part.lowercased()
             return styleKeywords.contains { lower.contains($0) }
         }
-        return ([first] + styles).joined(separator: " - ")
+        return ([normalizedFirst] + styles).joined(separator: " - ")
     }
 }
 
