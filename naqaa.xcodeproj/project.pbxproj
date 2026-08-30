@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BA1D79FD30424AA80019D3D0 /* KOMedia-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = BA1D79FC30424AA80019D3D0 /* KOMedia-Black.otf */; };
 		BA59C3312FD220310001C19A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = BA59C3302FD220310001C19A /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
@@ -29,7 +28,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		BA1D79FC30424AA80019D3D0 /* KOMedia-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "KOMedia-Black.otf"; sourceTree = "<group>"; };
 		BA59C3302FD220310001C19A /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		BA9D025E2FB7D74E00B23EAC /* naqaa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = naqaa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA9D026D2FB7D74F00B23EAC /* naqaaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = naqaaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -95,7 +93,6 @@
 		BA9D02552FB7D74E00B23EAC = {
 			isa = PBXGroup;
 			children = (
-				BA1D79FC30424AA80019D3D0 /* KOMedia-Black.otf */,
 				BA59C3302FD220310001C19A /* Localizable.xcstrings */,
 				BA9D02602FB7D74E00B23EAC /* naqaa */,
 				BA9D02702FB7D74F00B23EAC /* naqaaTests */,
@@ -239,7 +236,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BA1D79FD30424AA80019D3D0 /* KOMedia-Black.otf in Resources */,
 				BA59C3312FD220310001C19A /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
