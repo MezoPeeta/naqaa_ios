@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Runs before every `git push`.
+# Slow check (minutes): runs the unit test suite (naqaaTests).
+# UI tests (naqaaUITests) are excluded on purpose - they're not stable yet.
+
+set -euo pipefail
+
+PROJECT="naqaa.xcodeproj"
+SCHEME="naqaa"
+TEST_DESTINATION="${TEST_DESTINATION:-platform=iOS Simulator,name=iPhone 17 Pro}"
+ONLY_TESTING="naqaaTests"
+
+xcodebuild test \
+    -project "$PROJECT" \
+    -scheme "$SCHEME" \
+    -destination "$TEST_DESTINATION" \
+    -only-testing:$ONLY_TESTING 2>&1 | tail -n 60

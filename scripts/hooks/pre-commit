@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Runs before every `git commit`.
+# Fast check (~seconds): lints the whole repo with SwiftLint.
+# Aborts the commit if any violation is found.
+
+set -euo pipefail
+
+if ! command -v swiftlint >/dev/null 2>&1; then
+    echo "pre-commit: swiftlint not found - skipping lint" >&2
+    exit 0
+fi
+
+swiftlint lint
