@@ -10,7 +10,7 @@ import SwiftUI
 struct PlayerView: View {
 
     var body: some View {
-        VStack{
+        VStack {
             Text("Player Screen")
 
         }

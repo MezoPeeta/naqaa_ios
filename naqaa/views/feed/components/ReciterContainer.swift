@@ -20,7 +20,7 @@ struct ReciterContainer: View {
         VStack {
             Spacer()
 
-            VStack(spacing:0){
+            VStack(spacing: 0) {
                 let parts = ReciterNameParser.split(playerState.selectedReciter.reciter.name)
                 if let last = parts.last {
                     Text(parts.first)
@@ -33,8 +33,8 @@ struct ReciterContainer: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.4)
                         .contentTransition(.numericText())
-                        .padding(.top,25)
-                    
+                        .padding(.top, 25)
+
                 } else {
                     Text(parts.first)
                         .font(.system(size: lastNameSize))

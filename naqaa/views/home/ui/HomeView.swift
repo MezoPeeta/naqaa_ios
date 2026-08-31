@@ -14,10 +14,10 @@ struct HomeView: View {
                         expandMiniPlayer.toggle()
                     }
             }
-            .fullScreenCover(isPresented: $expandMiniPlayer){
+            .fullScreenCover(isPresented: $expandMiniPlayer) {
                 ScrollView {
                 }
-                .safeAreaInset(edge: .top, spacing: 0){
+                .safeAreaInset(edge: .top, spacing: 0) {
                     VStack(spacing: 10) {
                         Capsule()
                             .fill(.primary.secondary)
@@ -30,9 +30,9 @@ struct HomeView: View {
                 .navigationTransition(.zoom(sourceID: "miniplayer", in: animation))
                 .background(.homeBackground)
                 .presentationBackground(.clear)
-                
+
             }
-        
+
     }
 }
 

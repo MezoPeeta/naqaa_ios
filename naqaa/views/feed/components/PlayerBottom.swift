@@ -19,11 +19,11 @@ struct PlayerBottom: View {
                             .foregroundStyle(.secondary)
                     }
                     Spacer()
-                    
-                    Button(action: {}) {
+
+                    Button(action: {}, label: {
                         DirectionalImage("earpods")
-                    }
-                    
+                    })
+
                     Button {
                         playerState.togglePlayPause()
                     } label: {
@@ -33,10 +33,13 @@ struct PlayerBottom: View {
                             DirectionalImage(playerState.isPlaying ? "pause.fill" : "play.fill")
                         }
                     }
-                    .accessibilityLabel(playerState.isBuffering ? "Buffering" : (playerState.isPlaying ? "Pause" : "Play"))
+                    .accessibilityLabel(
+                        playerState.isBuffering
+                            ? "Buffering"
+                            : (playerState.isPlaying ? "Pause" : "Play")
+                    )
                     .disabled(playerState.isEmpty)
 
-                   
                 }
                 .buttonStyle(.plain)
                 .padding(.horizontal, 22)
