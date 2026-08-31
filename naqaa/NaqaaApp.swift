@@ -7,9 +7,11 @@
 
 import SwiftUI
 import SwiftData
+import UIKit
 
 @main
 struct NaqaaApp: App {
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Item.self

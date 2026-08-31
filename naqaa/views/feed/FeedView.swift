@@ -8,7 +8,7 @@ struct FeedView: View {
         GeometryReader { proxy in
             NavigationStack {
                 ZStack(alignment: .top) {
-                    Color.background.ignoresSafeArea()
+                    Color.homeBackground.ignoresSafeArea()
                     ScrollView {
                         VStack(alignment: .leading) {
                             ReciterContainer(

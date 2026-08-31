@@ -2,37 +2,37 @@ import SwiftUI
 
 struct HomeView: View {
     @State private var playerState = PlayerState()
-    @State private var reciterViewModel = ReciterViewModel()
-
+    @State private var expandMiniPlayer = false
+    @Namespace private var animation
     var body: some View {
-        TabView {
-            Tab("Home", systemImage: "house") {
-                VStack(spacing: 0) {
-                    FeedView(
-                        reciterViewModel: reciterViewModel,
-                        playerState: playerState
-                    )
+        NativeTabView(playerState: playerState)
+            .tabBarMinimizeBehavior(.onScrollDown)
+            .tabViewBottomAccessory(isEnabled: !playerState.isEmpty) {
+                PlayerBottom(playerState: playerState)
+                    .matchedTransitionSource(id: "miniplayer", in: animation)
+                    .onTapGesture {
+                        expandMiniPlayer.toggle()
+                    }
+            }
+            .fullScreenCover(isPresented: $expandMiniPlayer){
+                ScrollView {
                 }
+                .safeAreaInset(edge: .top, spacing: 0){
+                    VStack(spacing: 10) {
+                        Capsule()
+                            .fill(.primary.secondary)
+                            .frame(width: 35, height: 3)
+                        PlayerView()
+                            .padding(.horizontal, 15)
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .navigationTransition(.zoom(sourceID: "miniplayer", in: animation))
+                .background(.homeBackground)
+                .presentationBackground(.clear)
+                
             }
-            Tab("Favorites", systemImage: "heart") {
-                FavoritesView()
-            }
-            Tab("Settings", systemImage: "gearshape.fill") {
-                SettingsView()
-            }
-            Tab(role: .search) {
-                SearchView(
-                    reciterViewModel: reciterViewModel,
-                    playerState: playerState
-                )
-            }
-        }
-        .tabViewBottomAccessory(isEnabled: playerState.selectedSurah != nil) {
-            PlayerBottom(playerState: playerState)
-                .transition(.move(edge: .bottom))
-        }
-        .tabBarMinimizeBehavior(.onScrollDown)
-        .tint(.selectedText)
+        
     }
 }
 

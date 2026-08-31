@@ -8,6 +8,12 @@
 import SwiftUI
 
 struct SettingsView: View {
+    private var appVersion: String {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
+        return build.isEmpty ? version : "\(version) (\(build))"
+    }
+
     var body: some View {
         NavigationStack {
             ZStack {
@@ -16,7 +22,15 @@ struct SettingsView: View {
                     Text("Asd")
                 }
 
-            }.navigationTitle("Settings")
+            }
+            .safeAreaInset(edge: .bottom) {
+                Text("Version \(appVersion)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity)
+                    .padding(.bottom, 8)
+            }
+            .navigationTitle("Settings")
         }
 
     }

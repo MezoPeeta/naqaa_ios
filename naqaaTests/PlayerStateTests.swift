@@ -177,6 +177,8 @@ final class PlayerStateTests: XCTestCase {
 private final class FakeAudioPlayer: AudioPlaying {
     var isPlaying = false
     var isBuffering = false
+    var currentTime: Double = 0
+    var duration: Double = 0
     private(set) var playedSurahIds: [Int] = []
     private(set) var playedReciterIds: [String] = []
     private(set) var toggleCalls = 0

@@ -5,6 +5,7 @@ import Observation
 @MainActor
 final class PlayerState {
     var selectedSurah: Surah?
+    var isEmpty: Bool { selectedSurah == nil }
     var selectedReciter: ReciterMoshafItem = .defaultItem
     var surahs: [Surah] = []
 
@@ -12,6 +13,10 @@ final class PlayerState {
 
     var isPlaying: Bool { player.isPlaying }
     var isBuffering: Bool { player.isBuffering }
+    var progress: Double {
+        guard player.duration > 0 else { return 0 }
+        return min(max(player.currentTime / player.duration, 0), 1)
+    }
 
     private var queue: SurahQueue { SurahQueue(surahs: surahs) }
 

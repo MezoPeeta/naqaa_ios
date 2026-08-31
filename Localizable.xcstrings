@@ -107,6 +107,9 @@
     "Play" : {
 
     },
+    "Player Screen" : {
+
+    },
     "Playing" : {
 
     },
@@ -281,6 +284,9 @@
           }
         }
       }
+    },
+    "Version %@" : {
+
     }
   },
   "version" : "1.2"

@@ -12,10 +12,11 @@ struct SearchView: View {
     let playerState: PlayerState
     @State private var selected = 0
     @State private var query = ""
+    @FocusState private var isSearchFocused: Bool
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.background.ignoresSafeArea()
+                Color.homeBackground.ignoresSafeArea()
                 ScrollView {
                     VStack(alignment: .leading) {
                         Picker("Search", selection: $selected) {
@@ -23,6 +24,8 @@ struct SearchView: View {
                             Text("Reciters").tag(1)
                         }
                         .pickerStyle(.segmented)
+                        .controlSize(.large)
+
                         Spacer(minLength: 30)
 
                         if selected == 1 {
@@ -48,6 +51,11 @@ struct SearchView: View {
         }
 
         .searchable(text: $query)
+        .searchFocused($isSearchFocused)
+        .task {
+            try? await Task.sleep(for: .milliseconds(50))
+            isSearchFocused = true
+        }
 
     }
 }
