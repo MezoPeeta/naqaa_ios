@@ -15,22 +15,29 @@ struct HomeView: View {
                     }
             }
             .fullScreenCover(isPresented: $expandMiniPlayer) {
+                
                 ScrollView {
                 }
-                .safeAreaInset(edge: .top, spacing: 0) {
-                    VStack(spacing: 10) {
-                        Capsule()
-                            .fill(.primary.secondary)
-                            .frame(width: 35, height: 3)
-                        PlayerView()
-                            .padding(.horizontal, 15)
-                    }
+                
+                
+                .safeAreaInset(edge: .bottom, spacing: 0) {
+                    
+                    PlayerView(playerState: playerState)
+                        .padding(.horizontal, 15)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .navigationTransition(.zoom(sourceID: "miniplayer", in: animation))
                 .background(.homeBackground)
                 .presentationBackground(.clear)
+                
+            
 
+//                PlayerView(playerState: playerState)
+//                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                    .navigationTransition(.zoom(sourceID: "miniplayer", in: animation))
+//                    .background(.homeBackground)
+//                    .presentationBackground(.clear)
+//                    .ignoresSafeArea(edges: .bottom)
             }
 
     }
@@ -38,4 +45,6 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .preferredColorScheme(.dark)
+
 }

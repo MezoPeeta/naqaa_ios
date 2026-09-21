@@ -61,6 +61,7 @@ struct SurahListVIew: View {
                             .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
+                        .modifier(PopPressEffect())
 
                         if index < surahs.count - 1 {
                             Divider().overlay { Color.white.opacity(0.4) }
@@ -87,6 +88,36 @@ struct SurahListVIew: View {
         }
     }
 
+}
+
+private struct PopPressStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.96 : 1)
+            .brightness(configuration.isPressed ? 0.06 : 0)
+            .animation(
+                .spring(response: 0.35, dampingFraction: 0.6),
+                value: configuration.isPressed
+            )
+    }
+}
+
+private struct PopPressEffect: ViewModifier {
+    @GestureState private var isPressing = false
+
+    func body(content: Content) -> some View {
+        content
+            .scaleEffect(isPressing ? 0.955 : 1)
+            .brightness(isPressing ? 0.06 : 0)
+            .animation(
+                .spring(response: 0.35, dampingFraction: 0.6),
+                value: isPressing
+            )
+            .simultaneousGesture(
+                DragGesture(minimumDistance: 0)
+                    .updating($isPressing) { _, state, _ in state = true }
+            )
+    }
 }
 
 #Preview {

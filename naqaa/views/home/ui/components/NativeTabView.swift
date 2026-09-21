@@ -34,10 +34,13 @@ struct NativeTabView: View {
             }
         }
         .tint(.selectedText)
+        .tabViewSearchActivation(.searchTabSelection)
 
     }
 }
 
 #Preview {
     NativeTabView(playerState: PlayerState())
+        .preferredColorScheme(.dark)
+
 }

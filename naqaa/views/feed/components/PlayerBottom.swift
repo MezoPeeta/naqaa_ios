@@ -9,7 +9,7 @@ struct PlayerBottom: View {
                     .opacity(0.15)
                     .frame(width: geo.size.width * playerState.progress)
 
-                HStack(alignment: .center, spacing: 16) {
+                HStack(alignment: .center, spacing: 22) {
                     VStack(alignment: .leading) {
                         Text(playerState.selectedSurah?.displayName ?? "")
                             .font(.subheadline)
@@ -21,8 +21,9 @@ struct PlayerBottom: View {
                     Spacer()
 
                     Button(action: {}, label: {
-                        DirectionalImage("earpods")
+                        DirectionalImage("airpods")
                     })
+                  
 
                     Button {
                         playerState.togglePlayPause()

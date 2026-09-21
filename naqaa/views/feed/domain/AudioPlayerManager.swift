@@ -77,7 +77,7 @@ final class AudioPlayerManager {
     private func observe(player: AVPlayer) {
         statusObservation = player.observe(\.timeControlStatus, options: [.new]) { [weak self] player, _ in
             let status = player.timeControlStatus
-            Task { @MainActor in
+            Task { @MainActor [weak self] in
                 self?.handleStatus(status)
             }
         }

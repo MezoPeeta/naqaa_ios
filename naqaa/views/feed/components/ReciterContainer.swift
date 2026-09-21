@@ -27,6 +27,7 @@ struct ReciterContainer: View {
                         .font(.system(size: firstNameSize))
                         .contentTransition(.numericText())
                     Text(last)
+
                         .font(.system(size: lastNameSize))
                         .fontWeight(.black)
                         .fontWidth(.expanded)
