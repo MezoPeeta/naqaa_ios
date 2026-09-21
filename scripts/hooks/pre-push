@@ -7,7 +7,25 @@ set -euo pipefail
 
 PROJECT="naqaa.xcodeproj"
 SCHEME="naqaa"
-TEST_DESTINATION="${TEST_DESTINATION:-platform=iOS Simulator,name=iPhone 17 Pro}"
+
+# Pick an iPhone simulator dynamically so the hook survives Xcode updates:
+# prefer a booted one, otherwise the first available. Override with TEST_DESTINATION.
+pick_simulator() {
+    local devices
+    devices="$(xcrun simctl list devices available | grep -E '^\s+iPhone ')"
+    { echo "$devices" | grep '(Booted)' || true; echo "$devices"; } \
+        | head -n 1 \
+        | grep -oE '[0-9A-F]{8}-([0-9A-F]{4}-){3}[0-9A-F]{12}' || true
+}
+
+if [ -z "${TEST_DESTINATION:-}" ]; then
+    SIM_ID="$(pick_simulator)"
+    if [ -z "$SIM_ID" ]; then
+        echo "pre-push: no available iPhone simulator found" >&2
+        exit 1
+    fi
+    TEST_DESTINATION="platform=iOS Simulator,id=$SIM_ID"
+fi
 ONLY_TESTING="naqaaTests"
 
 xcodebuild test \

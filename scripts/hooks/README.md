@@ -29,10 +29,10 @@ stable. If you want to include them, edit `pre-push`'s `-only-testing:` flags.
 
 - Lint: any SwiftLint violation fails `pre-commit`. Skip the whole check (not
   recommended) with `git commit --no-verify`.
-- Tests: choose a different simulator with an env var, e.g.
+- Tests: by default the hook picks a booted iPhone simulator (else the first available one). Choose a specific one with an env var, e.g.
 
 ```sh
-TEST_DESTINATION='platform=iOS Simulator,name=iPhone 17' git push
+TEST_DESTINATION='platform=iOS Simulator,name=iPhone 18 Pro' git push
 ```
 
 - Skip all hooks for an emergency with `git commit --no-verify` / `git push --no-verify`.
