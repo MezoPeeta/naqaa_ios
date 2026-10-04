@@ -14,7 +14,7 @@ bash scripts/install-hooks.sh
 | Hook | When | Runs | Cost |
 |---|---|---|---|
 | `pre-commit` | every `git commit` | `swiftlint lint` | ~2 seconds |
-| `pre-push` | every `git push` | `xcodebuild test -scheme naqaa -only-testing:naqaaTests` | a few minutes |
+| `pre-push` | every `git push` | `xcodebuild test -scheme ensat -only-testing:ensatTests` | a few minutes |
 
 ### Why lint on commit but tests on push
 
@@ -22,7 +22,7 @@ Lint is fast enough to run on every commit and catches style violations before
 they're committed. The unit test suite takes minutes, so it runs once per push
 instead of stalling every commit.
 
-UI tests (`naqaaUITests`) are intentionally excluded from the gate until they're
+UI tests (`ensatUITests`) are intentionally excluded from the gate until they're
 stable. If you want to include them, edit `pre-push`'s `-only-testing:` flags.
 
 ## Overriding things
