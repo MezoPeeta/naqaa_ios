@@ -37,7 +37,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		BA259A8B300EAF5900DB19C5 /* Exceptions for "naqaa" folder in "ensat" target */ = {
+		BA259A8B300EAF5900DB19C5 /* Exceptions for "ensat" folder in "ensat" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -52,22 +52,22 @@
 			path = fonts;
 			sourceTree = "<group>";
 		};
-		BA9D02602FB7D74E00B23EAC /* naqaa */ = {
+		BA9D02602FB7D74E00B23EAC /* ensat */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				BA259A8B300EAF5900DB19C5 /* Exceptions for "naqaa" folder in "ensat" target */,
+				BA259A8B300EAF5900DB19C5 /* Exceptions for "ensat" folder in "ensat" target */,
 			);
-			path = naqaa;
+			path = ensat;
 			sourceTree = "<group>";
 		};
-		BA9D02702FB7D74F00B23EAC /* naqaaTests */ = {
+		BA9D02702FB7D74F00B23EAC /* ensatTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = naqaaTests;
+			path = ensatTests;
 			sourceTree = "<group>";
 		};
-		BA9D027A2FB7D74F00B23EAC /* naqaaUITests */ = {
+		BA9D027A2FB7D74F00B23EAC /* ensatUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = naqaaUITests;
+			path = ensatUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -104,9 +104,9 @@
 				BA7614623072539800A27E5F /* .env */,
 				BA76145630620C7D00A27E5F /* fonts */,
 				BA59C3302FD220310001C19A /* Localizable.xcstrings */,
-				BA9D02602FB7D74E00B23EAC /* naqaa */,
-				BA9D02702FB7D74F00B23EAC /* naqaaTests */,
-				BA9D027A2FB7D74F00B23EAC /* naqaaUITests */,
+				BA9D02602FB7D74E00B23EAC /* ensat */,
+				BA9D02702FB7D74F00B23EAC /* ensatTests */,
+				BA9D027A2FB7D74F00B23EAC /* ensatUITests */,
 				BA9D025F2FB7D74E00B23EAC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -139,7 +139,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				BA76145630620C7D00A27E5F /* fonts */,
-				BA9D02602FB7D74E00B23EAC /* naqaa */,
+				BA9D02602FB7D74E00B23EAC /* ensat */,
 			);
 			name = ensat;
 			packageProductDependencies = (
@@ -163,7 +163,7 @@
 				BA9D026F2FB7D74F00B23EAC /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				BA9D02702FB7D74F00B23EAC /* naqaaTests */,
+				BA9D02702FB7D74F00B23EAC /* ensatTests */,
 			);
 			name = ensatTests;
 			packageProductDependencies = (
@@ -186,7 +186,7 @@
 				BA9D02792FB7D74F00B23EAC /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				BA9D027A2FB7D74F00B23EAC /* naqaaUITests */,
+				BA9D027A2FB7D74F00B23EAC /* ensatUITests */,
 			);
 			name = ensatUITests;
 			packageProductDependencies = (
