@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		BA59C3312FD220310001C19A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = BA59C3302FD220310001C19A /* Localizable.xcstrings */; };
+		BA7614603072539800A27E5F /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = BA7614613072539800A27E5F /* PostHog */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +30,7 @@
 
 /* Begin PBXFileReference section */
 		BA59C3302FD220310001C19A /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		BA7614623072539800A27E5F /* .env */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = .env; sourceTree = "<group>"; };
 		BA9D025E2FB7D74E00B23EAC /* naqaa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = naqaa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA9D026D2FB7D74F00B23EAC /* naqaaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = naqaaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA9D02772FB7D74F00B23EAC /* naqaaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = naqaaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -45,6 +47,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		BA76145630620C7D00A27E5F /* fonts */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = fonts;
+			sourceTree = "<group>";
+		};
 		BA9D02602FB7D74E00B23EAC /* naqaa */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -70,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA7614603072539800A27E5F /* PostHog in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,6 +101,8 @@
 		BA9D02552FB7D74E00B23EAC = {
 			isa = PBXGroup;
 			children = (
+				BA7614623072539800A27E5F /* .env */,
+				BA76145630620C7D00A27E5F /* fonts */,
 				BA59C3302FD220310001C19A /* Localizable.xcstrings */,
 				BA9D02602FB7D74E00B23EAC /* naqaa */,
 				BA9D02702FB7D74F00B23EAC /* naqaaTests */,
@@ -128,10 +138,12 @@
 				BA95EB67300B029C00CEDCC7 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
+				BA76145630620C7D00A27E5F /* fonts */,
 				BA9D02602FB7D74E00B23EAC /* naqaa */,
 			);
 			name = naqaa;
 			packageProductDependencies = (
+				BA7614613072539800A27E5F /* PostHog */,
 			);
 			productName = naqaa;
 			productReference = BA9D025E2FB7D74E00B23EAC /* naqaa.app */;
@@ -191,7 +203,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2650;
-				LastUpgradeCheck = 2650;
+				LastUpgradeCheck = 2700;
 				TargetAttributes = {
 					BA9D025D2FB7D74E00B23EAC = {
 						CreatedOnToolsVersion = 26.5;
@@ -218,6 +230,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				BA95EB65300ADF0A00CEDCC7 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
+				BA76145D3072539800A27E5F /* XCRemoteSwiftPackageReference "posthog-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = BA9D025F2FB7D74E00B23EAC /* Products */;
@@ -303,6 +316,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -356,6 +370,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -367,6 +382,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -413,6 +429,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
@@ -421,6 +438,7 @@
 		};
 		BA9D02822FB7D74F00B23EAC /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BA7614623072539800A27E5F /* .env */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -441,7 +459,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = test.naqaa;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ensat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -455,6 +473,7 @@
 		};
 		BA9D02832FB7D74F00B23EAC /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BA7614623072539800A27E5F /* .env */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -475,7 +494,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = test.naqaa;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ensat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -609,6 +628,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		BA76145D3072539800A27E5F /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PostHog/posthog-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.85.3;
+			};
+		};
 		BA95EB65300ADF0A00CEDCC7 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
@@ -620,6 +647,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		BA7614613072539800A27E5F /* PostHog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BA76145D3072539800A27E5F /* XCRemoteSwiftPackageReference "posthog-ios" */;
+			productName = PostHog;
+		};
 		BA95EB66300B029C00CEDCC7 /* SwiftLintBuildToolPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = BA95EB65300ADF0A00CEDCC7 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
