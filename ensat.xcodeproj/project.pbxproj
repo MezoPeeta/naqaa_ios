@@ -17,14 +17,14 @@
 			containerPortal = BA9D02562FB7D74E00B23EAC /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = BA9D025D2FB7D74E00B23EAC;
-			remoteInfo = naqaa;
+			remoteInfo = ensat;
 		};
 		BA9D02782FB7D74F00B23EAC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BA9D02562FB7D74E00B23EAC /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = BA9D025D2FB7D74E00B23EAC;
-			remoteInfo = naqaa;
+			remoteInfo = ensat;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -145,7 +145,7 @@
 			packageProductDependencies = (
 				BA7614613072539800A27E5F /* PostHog */,
 			);
-			productName = naqaa;
+			productName = ensat;
 			productReference = BA9D025E2FB7D74E00B23EAC /* ensat.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -168,7 +168,7 @@
 			name = ensatTests;
 			packageProductDependencies = (
 			);
-			productName = naqaaTests;
+			productName = ensatTests;
 			productReference = BA9D026D2FB7D74F00B23EAC /* ensatTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -191,7 +191,7 @@
 			name = ensatUITests;
 			packageProductDependencies = (
 			);
-			productName = naqaaUITests;
+			productName = ensatUITests;
 			productReference = BA9D02772FB7D74F00B23EAC /* ensatUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
@@ -446,7 +446,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = naqaa/Info.plist;
+				INFOPLIST_FILE = ensat/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Ensat;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -481,7 +481,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = naqaa/Info.plist;
+				INFOPLIST_FILE = ensat/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Ensat;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -563,7 +563,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = naqaa;
+				TEST_TARGET_NAME = ensat;
 			};
 			name = Debug;
 		};
@@ -582,7 +582,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = naqaa;
+				TEST_TARGET_NAME = ensat;
 			};
 			name = Release;
 		};
