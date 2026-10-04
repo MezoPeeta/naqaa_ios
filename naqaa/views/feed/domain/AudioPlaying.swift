@@ -11,6 +11,7 @@ protocol AudioPlaying {
     var onPreviousTrack: (() -> Void)? { get set }
     func play(surah: Surah, reciter: ReciterMoshafItem)
     func togglePlayPause()
+    func seek(to time: Double)
 }
 
 extension AudioPlayerManager: AudioPlaying {}

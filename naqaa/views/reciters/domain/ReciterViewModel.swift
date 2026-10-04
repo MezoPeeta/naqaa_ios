@@ -82,9 +82,21 @@ final class ReciterViewModel {
                 )
 
                 state = .loaded(decoded.flatItems)
+                PostHogExportLogger.info(
+                    "Reciter catalog loaded",
+                    attributes: ["reciter_count": decoded.flatItems.count]
+                )
             } catch let error as DecodingError {
+                PostHogExportLogger.warn(
+                    "Reciter catalog load failed",
+                    attributes: ["failure_kind": "decoding"]
+                )
                 state = .error(APIError.decoding(error).localizedDescription)
             } catch {
+                PostHogExportLogger.warn(
+                    "Reciter catalog load failed",
+                    attributes: ["failure_kind": "network"]
+                )
                 state = .error(
                     APIError.networkError(error).localizedDescription
                 )

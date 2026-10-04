@@ -1,4 +1,5 @@
 import SwiftUI
+import PostHog
 
 struct SurahListVIew: View {
     @State private var surahViewModel = SurahListViewModel()
@@ -18,6 +19,10 @@ struct SurahListVIew: View {
                     ForEach(surahs.enumerated(), id: \.element.id) { index, surah in
                         let isSelected = playerState.selectedSurah?.id == surah.id
                         Button {
+                            PostHogSDK.shared.capture(
+                                "surah_played",
+                                properties: ["surah_id": surah.id]
+                            )
                             playerState.play(surah)
                             surahViewModel.selectedSurah = surah
                         } label: {

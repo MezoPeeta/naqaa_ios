@@ -151,6 +151,28 @@ final class PlayerStateTests: XCTestCase {
         XCTAssertEqual(fake.toggleCalls, 1)
     }
 
+    func testSeekToProgressConvertsToTime() {
+        let (state, fake) = makeState()
+        fake.duration = 200
+        state.seek(toProgress: 0.25)
+        XCTAssertEqual(fake.seekTimes, [50])
+    }
+
+    func testSeekToProgressClampsOutOfRangeValues() {
+        let (state, fake) = makeState()
+        fake.duration = 200
+        state.seek(toProgress: -1)
+        state.seek(toProgress: 2)
+        XCTAssertEqual(fake.seekTimes, [0, 200])
+    }
+
+    func testSeekToProgressWithoutDurationIsNoOp() {
+        let (state, fake) = makeState()
+        fake.duration = 0
+        state.seek(toProgress: 0.5)
+        XCTAssertTrue(fake.seekTimes.isEmpty)
+    }
+
     func testOnNextTrackCallbackAdvancesPlaylist() {
         let (state, _) = makeState()
         state.play(makeSurah(id: 1))
@@ -171,6 +193,50 @@ final class PlayerStateTests: XCTestCase {
         state.player.onTrackEnded?()
         XCTAssertEqual(state.selectedSurah?.id, 2)
     }
+
+    func testExitTransitionAmountIsZeroBeforeTheTransitionWindow() {
+        let (state, fake) = makeState()
+        fake.duration = 300
+        fake.currentTime = 296
+        XCTAssertEqual(state.exitTransitionAmount, 0)
+    }
+
+    func testExitTransitionAmountRampsToOneAtTheEnd() {
+        let (state, fake) = makeState()
+        fake.duration = 30
+        fake.currentTime = 27
+        XCTAssertEqual(state.exitTransitionAmount, 0)
+
+        fake.currentTime = 28
+        XCTAssertEqual(state.exitTransitionAmount, 1.0 / 3.0, accuracy: 0.0001)
+
+        fake.currentTime = 29
+        XCTAssertEqual(state.exitTransitionAmount, 2.0 / 3.0, accuracy: 0.0001)
+
+        fake.currentTime = 30
+        XCTAssertEqual(state.exitTransitionAmount, 1, accuracy: 0.0001)
+
+        fake.currentTime = 35
+        XCTAssertEqual(state.exitTransitionAmount, 1, accuracy: 0.0001)
+    }
+
+    func testExitTransitionAmountIsZeroWhenDurationIsUnknown() {
+        let (state, fake) = makeState()
+        fake.duration = 0
+        fake.currentTime = 0
+        XCTAssertEqual(state.exitTransitionAmount, 0)
+    }
+
+    func testExitTransitionAmountResetsWhenNextTrackStarts() {
+        let (state, fake) = makeState()
+        state.play(makeSurah(id: 1))
+        fake.duration = 300
+        fake.currentTime = 300
+        XCTAssertEqual(state.exitTransitionAmount, 1, accuracy: 0.0001)
+
+        state.playNext()
+        XCTAssertEqual(state.exitTransitionAmount, 0)
+    }
 }
 
 @MainActor
@@ -181,6 +247,7 @@ private final class FakeAudioPlayer: AudioPlaying {
     var duration: Double = 0
     private(set) var playedSurahIds: [Int] = []
     private(set) var playedReciterIds: [String] = []
+    private(set) var seekTimes: [Double] = []
     private(set) var toggleCalls = 0
 
     var onTrackEnded: (() -> Void)?
@@ -190,10 +257,17 @@ private final class FakeAudioPlayer: AudioPlaying {
     func play(surah: Surah, reciter: ReciterMoshafItem) {
         playedSurahIds.append(surah.id)
         playedReciterIds.append(reciter.id)
+        currentTime = 0
+        duration = 0
     }
 
     func togglePlayPause() {
         toggleCalls += 1
+    }
+
+    func seek(to time: Double) {
+        seekTimes.append(time)
+        currentTime = time
     }
 }
 

@@ -19,6 +19,7 @@ final class AudioPlayerManager {
     private var statusObservation: NSKeyValueObservation?
     private var endObserver: NSObjectProtocol?
     private var interruptionTask: Task<Void, Never>?
+    private var playbackTask: Task<Void, Never>?
 
     private var didConfigureSession = false
     private var currentTitle = ""
@@ -29,20 +30,26 @@ final class AudioPlayerManager {
         guard let serverURL = URL(string: reciter.moshaf.server) else { return }
         let url = serverURL.appending(path: fileName)
 
+        PostHogExportLogger.info(
+            "Surah playback requested",
+            attributes: ["surah_id": surah.id]
+        )
+
         configureAudioSession()
 
         let player = player ?? AVPlayer()
         self.player = player
 
         removeObservers()
+        currentTime = 0
+        duration = 0
         player.replaceCurrentItem(with: AVPlayerItem(url: url))
         observe(player: player)
 
         currentTitle = surah.displayName
         currentArtist = reciter.reciter.name
 
-        activateSession()
-        player.play()
+        startPlayback(player)
         updateNowPlayingInfo()
     }
 
@@ -51,9 +58,20 @@ final class AudioPlayerManager {
         if isPlaying {
             player.pause()
         } else {
-            activateSession()
-            player.play()
+            startPlayback(player)
         }
+    }
+
+    func seek(to time: Double) {
+        guard let player, player.currentItem != nil else { return }
+        let target = max(time, 0)
+        currentTime = target
+        player.seek(
+            to: CMTime(seconds: target, preferredTimescale: 600),
+            toleranceBefore: .zero,
+            toleranceAfter: .zero
+        )
+        updateNowPlayingInfo()
     }
 
     private func configureAudioSession() {
@@ -70,8 +88,23 @@ final class AudioPlayerManager {
         observeInterruptions()
     }
 
-    private func activateSession() {
-        try? AVAudioSession.sharedInstance().setActive(true)
+  
+    private func startPlayback(_ player: AVPlayer) {
+        playbackTask?.cancel()
+        playbackTask = Task { [weak self] in
+            await Self.activateSession()
+            guard !Task.isCancelled, self != nil else { return }
+            player.play()
+        }
+    }
+
+    private nonisolated static func activateSession() async {
+        await withCheckedContinuation { continuation in
+            DispatchQueue.global(qos: .userInitiated).async {
+                try? AVAudioSession.sharedInstance().setActive(true)
+                continuation.resume()
+            }
+        }
     }
 
     private func observe(player: AVPlayer) {

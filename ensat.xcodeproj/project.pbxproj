@@ -31,18 +31,18 @@
 /* Begin PBXFileReference section */
 		BA59C3302FD220310001C19A /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		BA7614623072539800A27E5F /* .env */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = .env; sourceTree = "<group>"; };
-		BA9D025E2FB7D74E00B23EAC /* naqaa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = naqaa.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		BA9D026D2FB7D74F00B23EAC /* naqaaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = naqaaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		BA9D02772FB7D74F00B23EAC /* naqaaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = naqaaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA9D025E2FB7D74E00B23EAC /* ensat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ensat.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA9D026D2FB7D74F00B23EAC /* ensatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ensatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA9D02772FB7D74F00B23EAC /* ensatUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ensatUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		BA259A8B300EAF5900DB19C5 /* Exceptions for "naqaa" folder in "naqaa" target */ = {
+		BA259A8B300EAF5900DB19C5 /* Exceptions for "naqaa" folder in "ensat" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = BA9D025D2FB7D74E00B23EAC /* naqaa */;
+			target = BA9D025D2FB7D74E00B23EAC /* ensat */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -55,7 +55,7 @@
 		BA9D02602FB7D74E00B23EAC /* naqaa */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				BA259A8B300EAF5900DB19C5 /* Exceptions for "naqaa" folder in "naqaa" target */,
+				BA259A8B300EAF5900DB19C5 /* Exceptions for "naqaa" folder in "ensat" target */,
 			);
 			path = naqaa;
 			sourceTree = "<group>";
@@ -114,9 +114,9 @@
 		BA9D025F2FB7D74E00B23EAC /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				BA9D025E2FB7D74E00B23EAC /* naqaa.app */,
-				BA9D026D2FB7D74F00B23EAC /* naqaaTests.xctest */,
-				BA9D02772FB7D74F00B23EAC /* naqaaUITests.xctest */,
+				BA9D025E2FB7D74E00B23EAC /* ensat.app */,
+				BA9D026D2FB7D74F00B23EAC /* ensatTests.xctest */,
+				BA9D02772FB7D74F00B23EAC /* ensatUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -124,9 +124,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		BA9D025D2FB7D74E00B23EAC /* naqaa */ = {
+		BA9D025D2FB7D74E00B23EAC /* ensat */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BA9D02812FB7D74F00B23EAC /* Build configuration list for PBXNativeTarget "naqaa" */;
+			buildConfigurationList = BA9D02812FB7D74F00B23EAC /* Build configuration list for PBXNativeTarget "ensat" */;
 			buildPhases = (
 				BA9D025A2FB7D74E00B23EAC /* Sources */,
 				BA9D025B2FB7D74E00B23EAC /* Frameworks */,
@@ -141,17 +141,17 @@
 				BA76145630620C7D00A27E5F /* fonts */,
 				BA9D02602FB7D74E00B23EAC /* naqaa */,
 			);
-			name = naqaa;
+			name = ensat;
 			packageProductDependencies = (
 				BA7614613072539800A27E5F /* PostHog */,
 			);
 			productName = naqaa;
-			productReference = BA9D025E2FB7D74E00B23EAC /* naqaa.app */;
+			productReference = BA9D025E2FB7D74E00B23EAC /* ensat.app */;
 			productType = "com.apple.product-type.application";
 		};
-		BA9D026C2FB7D74F00B23EAC /* naqaaTests */ = {
+		BA9D026C2FB7D74F00B23EAC /* ensatTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BA9D02842FB7D74F00B23EAC /* Build configuration list for PBXNativeTarget "naqaaTests" */;
+			buildConfigurationList = BA9D02842FB7D74F00B23EAC /* Build configuration list for PBXNativeTarget "ensatTests" */;
 			buildPhases = (
 				BA9D02692FB7D74F00B23EAC /* Sources */,
 				BA9D026A2FB7D74F00B23EAC /* Frameworks */,
@@ -165,16 +165,16 @@
 			fileSystemSynchronizedGroups = (
 				BA9D02702FB7D74F00B23EAC /* naqaaTests */,
 			);
-			name = naqaaTests;
+			name = ensatTests;
 			packageProductDependencies = (
 			);
 			productName = naqaaTests;
-			productReference = BA9D026D2FB7D74F00B23EAC /* naqaaTests.xctest */;
+			productReference = BA9D026D2FB7D74F00B23EAC /* ensatTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		BA9D02762FB7D74F00B23EAC /* naqaaUITests */ = {
+		BA9D02762FB7D74F00B23EAC /* ensatUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BA9D02872FB7D74F00B23EAC /* Build configuration list for PBXNativeTarget "naqaaUITests" */;
+			buildConfigurationList = BA9D02872FB7D74F00B23EAC /* Build configuration list for PBXNativeTarget "ensatUITests" */;
 			buildPhases = (
 				BA9D02732FB7D74F00B23EAC /* Sources */,
 				BA9D02742FB7D74F00B23EAC /* Frameworks */,
@@ -188,11 +188,11 @@
 			fileSystemSynchronizedGroups = (
 				BA9D027A2FB7D74F00B23EAC /* naqaaUITests */,
 			);
-			name = naqaaUITests;
+			name = ensatUITests;
 			packageProductDependencies = (
 			);
 			productName = naqaaUITests;
-			productReference = BA9D02772FB7D74F00B23EAC /* naqaaUITests.xctest */;
+			productReference = BA9D02772FB7D74F00B23EAC /* ensatUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -218,7 +218,7 @@
 					};
 				};
 			};
-			buildConfigurationList = BA9D02592FB7D74E00B23EAC /* Build configuration list for PBXProject "naqaa" */;
+			buildConfigurationList = BA9D02592FB7D74E00B23EAC /* Build configuration list for PBXProject "ensat" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -237,9 +237,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				BA9D025D2FB7D74E00B23EAC /* naqaa */,
-				BA9D026C2FB7D74F00B23EAC /* naqaaTests */,
-				BA9D02762FB7D74F00B23EAC /* naqaaUITests */,
+				BA9D025D2FB7D74E00B23EAC /* ensat */,
+				BA9D026C2FB7D74F00B23EAC /* ensatTests */,
+				BA9D02762FB7D74F00B23EAC /* ensatUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -300,12 +300,12 @@
 		};
 		BA9D026F2FB7D74F00B23EAC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = BA9D025D2FB7D74E00B23EAC /* naqaa */;
+			target = BA9D025D2FB7D74E00B23EAC /* ensat */;
 			targetProxy = BA9D026E2FB7D74F00B23EAC /* PBXContainerItemProxy */;
 		};
 		BA9D02792FB7D74F00B23EAC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = BA9D025D2FB7D74E00B23EAC /* naqaa */;
+			target = BA9D025D2FB7D74E00B23EAC /* ensat */;
 			targetProxy = BA9D02782FB7D74F00B23EAC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -447,7 +447,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = naqaa/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Naqaa;
+				INFOPLIST_KEY_CFBundleDisplayName = Ensat;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -482,7 +482,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = naqaa/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Naqaa;
+				INFOPLIST_KEY_CFBundleDisplayName = Ensat;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -523,7 +523,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/naqaa.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/naqaa";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ensat.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ensat";
 			};
 			name = Debug;
 		};
@@ -544,7 +544,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/naqaa.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/naqaa";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ensat.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ensat";
 			};
 			name = Release;
 		};
@@ -589,7 +589,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		BA9D02592FB7D74E00B23EAC /* Build configuration list for PBXProject "naqaa" */ = {
+		BA9D02592FB7D74E00B23EAC /* Build configuration list for PBXProject "ensat" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BA9D027F2FB7D74F00B23EAC /* Debug */,
@@ -598,7 +598,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BA9D02812FB7D74F00B23EAC /* Build configuration list for PBXNativeTarget "naqaa" */ = {
+		BA9D02812FB7D74F00B23EAC /* Build configuration list for PBXNativeTarget "ensat" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BA9D02822FB7D74F00B23EAC /* Debug */,
@@ -607,7 +607,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BA9D02842FB7D74F00B23EAC /* Build configuration list for PBXNativeTarget "naqaaTests" */ = {
+		BA9D02842FB7D74F00B23EAC /* Build configuration list for PBXNativeTarget "ensatTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BA9D02852FB7D74F00B23EAC /* Debug */,
@@ -616,7 +616,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BA9D02872FB7D74F00B23EAC /* Build configuration list for PBXNativeTarget "naqaaUITests" */ = {
+		BA9D02872FB7D74F00B23EAC /* Build configuration list for PBXNativeTarget "ensatUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BA9D02882FB7D74F00B23EAC /* Debug */,

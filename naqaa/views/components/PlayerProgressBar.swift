@@ -10,6 +10,8 @@ struct PlayerProgressBar: View {
     var body: some View {
         Slider(value: scrubberValue, in: 0 ... 1, onEditingChanged: handleEditingChanged)
             .tint(Color.selectedText)
+            .sliderThumbVisibility(.hidden)
+            
             .accessibilityLabel("Playback position")
     }
 

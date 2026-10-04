@@ -4,6 +4,9 @@ import Observation
 @Observable
 @MainActor
 final class PlayerState {
+    /// Length of the visual hand-off that runs while a track is about to finish.
+    static let exitTransitionWindow: Double = 3
+
     var selectedSurah: Surah?
     var isEmpty: Bool { selectedSurah == nil }
     var selectedReciter: ReciterMoshafItem = .defaultItem
@@ -16,6 +19,17 @@ final class PlayerState {
     var progress: Double {
         guard player.duration > 0 else { return 0 }
         return min(max(player.currentTime / player.duration, 0), 1)
+    }
+
+    /// Ramps from `0` to `1` across the final `exitTransitionWindow` seconds of the current
+    /// track, so the player can shrink and blur out. Falls back to `0` as soon as the next
+    /// queue item starts playing.
+    var exitTransitionAmount: Double {
+        let duration = player.duration
+        guard duration > 0 else { return 0 }
+        let remaining = duration - player.currentTime
+        guard remaining < Self.exitTransitionWindow else { return 0 }
+        return min(max(1 - remaining / Self.exitTransitionWindow, 0), 1)
     }
 
     private var queue: SurahQueue { SurahQueue(surahs: surahs) }
@@ -45,6 +59,11 @@ final class PlayerState {
 
     func togglePlayPause() {
         player.togglePlayPause()
+    }
+
+    func seek(toProgress progress: Double) {
+        guard player.duration > 0 else { return }
+        player.seek(to: min(max(progress, 0), 1) * player.duration)
     }
 
     func playNext() {

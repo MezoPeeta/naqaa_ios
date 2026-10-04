@@ -1,4 +1,5 @@
 import SwiftUI
+import PostHog
 
 struct PlayerBottom: View {
     let playerState: PlayerState
@@ -26,6 +27,10 @@ struct PlayerBottom: View {
                   
 
                     Button {
+                        PostHogSDK.shared.capture(
+                            "playback_toggled",
+                            properties: ["action": playerState.isPlaying ? "pause" : "play"]
+                        )
                         playerState.togglePlayPause()
                     } label: {
                         if playerState.isBuffering {
@@ -53,8 +58,16 @@ struct PlayerBottom: View {
                     .onEnded { value in
                         guard abs(value.translation.width) > abs(value.translation.height) else { return }
                         if value.translation.width < 0 {
+                            PostHogSDK.shared.capture(
+                                "playback_skipped",
+                                properties: ["direction": "next", "source": "mini_player_swipe"]
+                            )
                             playerState.playNext()
                         } else {
+                            PostHogSDK.shared.capture(
+                                "playback_skipped",
+                                properties: ["direction": "previous", "source": "mini_player_swipe"]
+                            )
                             playerState.playPrevious()
                         }
                     }

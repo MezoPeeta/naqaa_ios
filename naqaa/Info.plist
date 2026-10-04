@@ -2,13 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-	</array>
+	<key>POSTHOG_HOST</key>
+	<string>$(POSTHOG_HOST_XCCONFIG)</string>
+	<key>POSTHOG_PROJECT_TOKEN</key>
+	<string>$(POSTHOG_PROJECT_TOKEN)</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>uthmani.otf</string>
+		<string>surah-name-v4.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
 	</array>
 </dict>
 </plist>

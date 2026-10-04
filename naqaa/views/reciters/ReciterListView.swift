@@ -1,4 +1,5 @@
 import SwiftUI
+import PostHog
 
 struct ReciterListView: View {
     @Bindable var reciterViewModel: ReciterViewModel
@@ -27,6 +28,10 @@ struct ReciterListView: View {
                     LazyVStack(alignment: .leading, spacing: 0) {
                         ForEach(reciters) { item in
                             Button {
+                                PostHogSDK.shared.capture(
+                                    "reciter_selected",
+                                    properties: ["reciter_moshaf_id": item.id]
+                                )
                                 reciterViewModel.select(item)
                                 playerState.selectReciter(item)
                                 onSelect?(item)

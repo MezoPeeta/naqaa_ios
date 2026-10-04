@@ -12,7 +12,7 @@ import SwiftData
 import UIKit
 
 @main
-struct NaqaaApp: App {
+struct EnsatApp: App {
 
     init() {
         #if !DEBUG

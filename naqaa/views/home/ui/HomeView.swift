@@ -23,7 +23,6 @@ struct HomeView: View {
                 .safeAreaInset(edge: .bottom, spacing: 0) {
                     
                     PlayerView(playerState: playerState)
-                        .padding(.horizontal, 15)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .navigationTransition(.zoom(sourceID: "miniplayer", in: animation))
@@ -32,12 +31,6 @@ struct HomeView: View {
                 
             
 
-//                PlayerView(playerState: playerState)
-//                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                    .navigationTransition(.zoom(sourceID: "miniplayer", in: animation))
-//                    .background(.homeBackground)
-//                    .presentationBackground(.clear)
-//                    .ignoresSafeArea(edges: .bottom)
             }
 
     }
