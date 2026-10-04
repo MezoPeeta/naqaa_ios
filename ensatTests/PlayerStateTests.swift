@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import naqaa
+@testable import ensat
 
 private func makeSurah(id: Int) -> Surah {
     Surah(

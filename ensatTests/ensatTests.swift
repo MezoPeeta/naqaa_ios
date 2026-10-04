@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import naqaa
+@testable import ensat
 
 final class NaqaaTests: XCTestCase {
 
