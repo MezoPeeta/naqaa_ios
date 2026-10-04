@@ -1,6 +1,6 @@
 //
-//  naqaaUITests.swift
-//  naqaaUITests
+//  ensatUITests.swift
+//  ensatUITests
 //
 //  Created by Mazen on 16/05/2026.
 //

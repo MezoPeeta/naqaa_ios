@@ -1,6 +1,6 @@
 //
-//  naqaaApp.swift
-//  naqaa
+//  ensatApp.swift
+//  ensat
 //
 //  Created by Mazen on 16/05/2026.
 //
@@ -53,7 +53,7 @@ struct EnsatApp: App {
 
         let config = PostHogConfig(projectToken: projectToken, host: host)
         config.errorTrackingConfig.autoCapture = true
-        config.logs.serviceName = "naqaa-ios"
+        config.logs.serviceName = "ensat-ios"
         PostHogSDK.shared.setup(config)
     }
 

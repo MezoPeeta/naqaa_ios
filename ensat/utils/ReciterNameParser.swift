@@ -1,6 +1,6 @@
 //
 //  ReciterNameParser.swift
-//  naqaa
+//  ensat
 //
 //  Created by Mazen on 30/08/2026.
 //
