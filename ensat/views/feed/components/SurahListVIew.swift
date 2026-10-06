@@ -5,7 +5,7 @@ struct SurahListVIew: View {
     @State private var surahViewModel = SurahListViewModel()
     let playerState: PlayerState
     var query = ""
-
+    
     var body: some View {
         Group {
             switch surahViewModel.state {
@@ -15,16 +15,23 @@ struct SurahListVIew: View {
                 ProgressView()
             case .loaded:
                 LazyVStack(alignment: .leading, spacing: 24) {
-                     let surahs = surahViewModel.filteredSurahs(for: query)
+                    let surahs = surahViewModel.filteredSurahs(for: query)
                     ForEach(surahs.enumerated(), id: \.element.id) { index, surah in
                         let isSelected = playerState.selectedSurah?.id == surah.id
+                        let isPlaying = isSelected && playerState.isPlaying
+                        
                         Button {
-                            PostHogSDK.shared.capture(
-                                "surah_played",
-                                properties: ["surah_id": surah.id]
-                            )
-                            playerState.play(surah)
-                            surahViewModel.selectedSurah = surah
+                            if !isSelected {
+                                PostHogSDK.shared.capture(
+                                    "surah_played",
+                                    properties: ["surah_id": surah.id]
+                                )
+                                playerState.play(surah)
+                                surahViewModel.selectedSurah = surah
+                                
+                            } else {
+                                playerState.togglePlayPause()
+                            }
                         } label: {
                             VStack(alignment: .leading, spacing: 4) {
                                 HStack {
@@ -42,41 +49,42 @@ struct SurahListVIew: View {
                                             )
                                             Divider().overlay { Color.white }
                                             Text(surah.revelationPlace.label)
-
+                                            
                                         }
                                         .foregroundStyle(Color.caption)
-
+                                        
                                         .font(.caption)
                                     }
                                     Spacer()
                                     DirectionalImage(isSelected ? "waveform" : "play")
                                         .font(.system(size: 18))
                                         .foregroundStyle(isSelected ? Color.selectedText : Color.primary)
+                                        .contentTransition(.symbolEffect(.replace))
                                         .symbolEffect(
                                             .variableColor.cumulative,
                                             options: .repeating,
-                                            isActive: isSelected
+                                            isActive: isPlaying
                                         )
                                         .accessibilityLabel(isSelected ? "Playing" : "Play")
-
+                                    
                                 }
-
+                                
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
                         .modifier(PopPressEffect())
-
+                        
                         if index < surahs.count - 1 {
                             Divider().overlay { Color.white.opacity(0.4) }
                         }
-
+                        
                     }
-
+                    
                 }
                 .toolbar(.hidden, for: .navigationBar)
-
+                
             case .error(let error):
                 Text(error)
             }
@@ -85,14 +93,14 @@ struct SurahListVIew: View {
             loadSurahs()
         }
     }
-
+    
     private func loadSurahs() {
         surahViewModel.loadLocal()
         if case .loaded(let surahs) = surahViewModel.state {
             playerState.surahs = surahs
         }
     }
-
+    
 }
 
 private struct PopPressStyle: ButtonStyle {
@@ -109,7 +117,7 @@ private struct PopPressStyle: ButtonStyle {
 
 private struct PopPressEffect: ViewModifier {
     @GestureState private var isPressing = false
-
+    
     func body(content: Content) -> some View {
         content
             .scaleEffect(isPressing ? 0.955 : 1)
@@ -126,8 +134,9 @@ private struct PopPressEffect: ViewModifier {
 }
 
 #Preview {
-    ZStack {
+    ScrollView{
         SurahListVIew(playerState: PlayerState())
-
+            .padding()
+            .preferredColorScheme(.dark)
     }
 }

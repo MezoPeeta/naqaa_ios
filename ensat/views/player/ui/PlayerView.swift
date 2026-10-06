@@ -105,8 +105,12 @@ struct PlayerView: View {
         VStack {
             Text(playerState.selectedSurah?.displayName ?? "")
                 .font(.title3)
-                .bold()
-                .fontWidth(.expanded)
+                    .bold()
+                    .fontWidth(.expanded)
+                    .contentTransition(.interpolate)
+            
+
+
             Text(playerState.selectedReciter.reciter.name)
                 .foregroundStyle(.secondary)
         }
@@ -133,7 +137,7 @@ struct PlayerView: View {
                 playerState.playPrevious()
             } label: {
                 DirectionalImage("backward.fill")
-                    .font(.title3)
+                    .font(.title)
             }
             
             Button {
@@ -143,14 +147,17 @@ struct PlayerView: View {
                 )
                 playerState.togglePlayPause()
             } label: {
-                if playerState.isBuffering {
-                    ProgressView()
-                        .frame(width: 28, height: 28)
-                } else {
+                ZStack {
+                    
                     DirectionalImage(playerState.isPlaying ? "pause.fill" : "play.fill")
                         .font(.title)
-                        .contentTransition(.symbolEffect(.replace))
+                        .contentTransition(.symbolEffect(.replace.magic(fallback: .downUp.byLayer), options: .nonRepeating))
+
+//                    if playerState.isBuffering {
+//                        ProgressView()
+//                    }
                 }
+                .frame(width: 44, height: 44)
             }
             .animation(.easeInOut(duration: 0.2), value: playerState.isPlaying)
             .accessibilityLabel(
@@ -167,7 +174,7 @@ struct PlayerView: View {
                 playerState.playNext()
             } label: {
                 DirectionalImage("forward.fill")
-                    .font(.title3)
+                    .font(.title)
             }
         }
     }

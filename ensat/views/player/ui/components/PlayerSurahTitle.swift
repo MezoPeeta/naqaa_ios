@@ -8,14 +8,12 @@ struct PlayerSurahTitle: View {
 
     var body: some View {
         ZStack {
-            // Soft ambient shadow — lifts the glyph off the background
             Text(key)
                 .font(font)
                 .foregroundStyle(.black)
                 .offset(y: 10)
                 .blur(radius: 18)
                 .opacity(0.5)
-            // Tight contact shadow — defines the 3D edge
             Text(key)
                 .font(font)
                 .foregroundStyle(.black)
@@ -32,6 +30,8 @@ struct PlayerSurahTitle: View {
         .minimumScaleFactor(0.6)
         .lineLimit(1)
         .frame(maxWidth: .infinity)
+        .contentTransition(.numericText(value: Double(id)))
+        .animation(.smooth, value: id)
     }
 }
 
@@ -40,6 +40,22 @@ struct PlayerSurahTitle: View {
         PlayerSurahTitle(id: 1)
         PlayerSurahTitle(id: 2)
         PlayerSurahTitle(id: 114)
+    }
+    .padding()
+}
+
+#Preview("Content transition") {
+    @Previewable @State var id = 1
+
+    VStack(spacing: 32) {
+        PlayerSurahTitle(id: id)
+            .contentTransition(.numericText(value: Double(id)))
+            .animation(.smooth, value: id)
+
+        HStack(spacing: 24) {
+            Button("Prev") { id = max(1, id - 1) }
+            Button("Next") { id = min(114, id + 1) }
+        }
     }
     .padding()
 }
