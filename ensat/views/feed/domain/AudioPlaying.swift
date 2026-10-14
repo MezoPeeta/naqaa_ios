@@ -10,6 +10,8 @@ protocol AudioPlaying {
     var onNextTrack: (() -> Void)? { get set }
     var onPreviousTrack: (() -> Void)? { get set }
     func play(surah: Surah, reciter: ReciterMoshafItem)
+    /// Loads the track and seeks to `startAt` without starting playback.
+    func prepare(surah: Surah, reciter: ReciterMoshafItem, startAt: Double)
     func togglePlayPause()
     func seek(to time: Double)
 }

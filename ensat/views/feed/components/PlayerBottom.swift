@@ -24,7 +24,6 @@ struct PlayerBottom: View {
                     Button(action: {}, label: {
                         DirectionalImage("airpods")
                     })
-                  
 
                     Button {
                         PostHogSDK.shared.capture(
@@ -33,11 +32,18 @@ struct PlayerBottom: View {
                         )
                         playerState.togglePlayPause()
                     } label: {
-                        if playerState.isBuffering {
-                            ProgressView()
-                        } else {
-                            DirectionalImage(playerState.isPlaying ? "pause.fill" : "play.fill")
+                        ZStack {
+                            if playerState.isBuffering {
+                                ProgressView()
+                                    .transition(.scale.combined(with: .opacity))
+                            } else {
+                                DirectionalImage(playerState.isPlaying ? "pause.fill" : "play.fill")
+                                    .contentTransition(.symbolEffect(.replace))
+                                    .transition(.scale.combined(with: .opacity))
+                            }
                         }
+                        .frame(width: 28, height: 28)
+                        .animation(.smooth(duration: 0.25), value: playerState.isBuffering)
                     }
                     .accessibilityLabel(
                         playerState.isBuffering

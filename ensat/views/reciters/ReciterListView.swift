@@ -27,38 +27,42 @@ struct ReciterListView: View {
                 } else {
                     LazyVStack(alignment: .leading, spacing: 0) {
                         ForEach(reciters) { item in
-                            Button {
-                                PostHogSDK.shared.capture(
-                                    "reciter_selected",
-                                    properties: ["reciter_moshaf_id": item.id]
-                                )
-                                reciterViewModel.select(item)
-                                playerState.selectReciter(item)
-                                onSelect?(item)
-                            } label: {
-                                HStack {
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(item.reciter.name)
-                                            .font(.headline)
-                                            .foregroundStyle(
-                                                reciterViewModel.isSelected(id: item.id)
-                                                    ? Color.selectedText : .primary
-                                            )
-                                        Text(item.formattedMoshafName)
-                                            .font(.caption)
-                                            .foregroundStyle(.secondary)
+                            HStack {
+                                Button {
+                                    PostHogSDK.shared.capture(
+                                        "reciter_selected",
+                                        properties: ["reciter_moshaf_id": item.id]
+                                    )
+                                    reciterViewModel.select(item)
+                                    playerState.selectReciter(item)
+                                    onSelect?(item)
+                                } label: {
+                                    HStack {
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            Text(item.reciter.name)
+                                                .font(.headline)
+                                                .foregroundStyle(
+                                                    reciterViewModel.isSelected(id: item.id)
+                                                        ? Color.selectedText : .primary
+                                                )
+                                            Text(item.formattedMoshafName)
+                                                .font(.caption)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                        Spacer()
+                                        if reciterViewModel.isSelected(id: item.id) {
+                                            Image(systemName: "checkmark")
+                                                .foregroundStyle(.selectedText)
+                                        }
                                     }
-                                    Spacer()
-                                    if reciterViewModel.isSelected(id: item.id) {
-                                        Image(systemName: "checkmark")
-                                            .foregroundStyle(.selectedText)
-                                    }
+                                    .padding(.vertical, 12)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .contentShape(Rectangle())
                                 }
-                                .padding(.vertical, 12)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .contentShape(Rectangle())
+                                .buttonStyle(.plain)
+
+                                FavoriteReciterButton(item: item)
                             }
-                            .buttonStyle(.plain)
                             Divider()
                         }
                     }

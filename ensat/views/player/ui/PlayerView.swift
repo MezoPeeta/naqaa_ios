@@ -11,20 +11,24 @@ import PostHog
 
 struct PlayerView: View {
     let playerState: PlayerState
-    
+
     private static let exitScale: CGFloat = 0.86
     private static let exitBlur: CGFloat = 12
-    
+
     private static let transitionDuration: Double = 1
-    
+
     @State private var titleScale: CGFloat = 1
     @State private var titleBlur: CGFloat = 0
     @State private var scrubProgress: Double?
-    
-    
+
     var body: some View {
-        GeometryReader { proxy in
-            ZStack(alignment: .top) {
+        ContainerShapeView { _ in
+            stackedLayout
+        } wide: { _ in
+            sideBySideLayout
+        }
+        .background(alignment: .top) {
+            GeometryReader { proxy in
                 PlayerTopPattern(
                     height: topPatternHeight(for: proxy.size),
                     color: .pattern.opacity(0.35),
@@ -32,30 +36,22 @@ struct PlayerView: View {
                 )
                 .frame(maxWidth: .infinity)
                 .ignoresSafeArea()
-                
-                if proxy.size.width > proxy.size.height {
-                    
-                    sideBySideLayout
-                } else {
-                    stackedLayout
-                    
-                }
             }
         }
         .onChange(of: playerState.exitTransitionAmount, initial: true) { _, amount in
             applyExitTransition(amount)
         }
     }
-    
+
     private var stackedLayout: some View {
         VStack(spacing: 24) {
             Spacer()
-            
+
             PlayerSurahTitle(id: playerState.selectedSurah?.id ?? 1)
                 .scaleEffect(titleScale)
                 .blur(radius: titleBlur)
             Spacer()
-            
+
             metadataAndControls
         }
         .buttonStyle(.plain)
@@ -63,7 +59,7 @@ struct PlayerView: View {
         .frame(maxHeight: .infinity)
         .safeAreaPadding(.bottom)
     }
-    
+
     private var sideBySideLayout: some View {
         HStack(spacing: 24) {
             PlayerSurahTitle(id: playerState.selectedSurah?.id ?? 1)
@@ -79,11 +75,11 @@ struct PlayerView: View {
         .frame(maxHeight: .infinity)
         .safeAreaPadding(.horizontal)
     }
-    
+
     private var metadataAndControls: some View {
         VStack {
             titleAndReciter
-            
+
             PlayerProgressBar(
                 progress: playerState.progress, scrubProgress: $scrubProgress) { progress in
                     PostHogSDK.shared.capture(
@@ -93,14 +89,14 @@ struct PlayerView: View {
                     playerState.seek(toProgress: progress)
                 }
                 .padding(.horizontal)
-            
+
             timeLabels
-            
+
             transportControls
                 .disabled(playerState.isEmpty)
         }
     }
-    
+
     private var titleAndReciter: some View {
         VStack {
             Text(playerState.selectedSurah?.displayName ?? "")
@@ -108,14 +104,12 @@ struct PlayerView: View {
                     .bold()
                     .fontWidth(.expanded)
                     .contentTransition(.interpolate)
-            
-
 
             Text(playerState.selectedReciter.reciter.name)
                 .foregroundStyle(.secondary)
         }
     }
-    
+
     private var timeLabels: some View {
         HStack {
             Text(formattedTime(displayedTime))
@@ -126,7 +120,7 @@ struct PlayerView: View {
         .foregroundStyle(.secondary)
         .padding(.horizontal)
     }
-    
+
     private var transportControls: some View {
         HStack(spacing: 32) {
             Button {
@@ -139,7 +133,7 @@ struct PlayerView: View {
                 DirectionalImage("backward.fill")
                     .font(.title)
             }
-            
+
             Button {
                 PostHogSDK.shared.capture(
                     "playback_toggled",
@@ -148,10 +142,12 @@ struct PlayerView: View {
                 playerState.togglePlayPause()
             } label: {
                 ZStack {
-                    
+
                     DirectionalImage(playerState.isPlaying ? "pause.fill" : "play.fill")
                         .font(.title)
-                        .contentTransition(.symbolEffect(.replace.magic(fallback: .downUp.byLayer), options: .nonRepeating))
+                        .contentTransition(
+                            .symbolEffect(.replace.magic(fallback: .downUp.byLayer), options: .nonRepeating)
+                        )
 
 //                    if playerState.isBuffering {
 //                        ProgressView()
@@ -165,7 +161,7 @@ struct PlayerView: View {
                 ? "Buffering"
                 : (playerState.isPlaying ? "Pause" : "Play")
             )
-            
+
             Button {
                 PostHogSDK.shared.capture(
                     "playback_skipped",
@@ -178,19 +174,19 @@ struct PlayerView: View {
             }
         }
     }
-    
+
     /// The playhead shown in the time labels, which follows the finger while scrubbing.
     private var displayedTime: Double {
         let duration = playerState.player.duration
         guard let scrubProgress, duration > 0 else { return playerState.player.currentTime }
         return scrubProgress * duration
     }
-    
+
     private func topPatternHeight(for size: CGSize) -> CGFloat {
         let proportional = size.height * 0.35
         return min(max(proportional, 100), 300)
     }
-    
+
     private func applyExitTransition(_ amount: Double) {
         let scale = Self.exitScale + (1 - Self.exitScale) * (1 - amount)
         let blur = Self.exitBlur * amount
@@ -199,7 +195,7 @@ struct PlayerView: View {
             titleBlur = blur
         }
     }
-    
+
     private func formattedTime(_ seconds: Double) -> String {
         guard seconds.isFinite, seconds > 0 else { return "0:00" }
         let totalSeconds = Int(seconds)
@@ -224,6 +220,7 @@ private final class PreviewAudioPlayer: AudioPlaying {
     var onNextTrack: (() -> Void)?
     var onPreviousTrack: (() -> Void)?
     func play(surah: Surah, reciter: ReciterMoshafItem) {}
+    func prepare(surah: Surah, reciter: ReciterMoshafItem, startAt: Double) {}
     func togglePlayPause() {}
     func seek(to time: Double) {}
 }

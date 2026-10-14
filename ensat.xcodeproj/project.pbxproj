@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BA59C3312FD220310001C19A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = BA59C3302FD220310001C19A /* Localizable.xcstrings */; };
 		BA7614603072539800A27E5F /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = BA7614613072539800A27E5F /* PostHog */; };
+		BA7615E93076A11000A27E5F /* ensat-logo.icon in Resources */ = {isa = PBXBuildFile; fileRef = BA7615E83076A11000A27E5F /* ensat-logo.icon */; };
+		BA7615ED3076A47500A27E5F /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = BA7615EC3076A47500A27E5F /* Localizable.xcstrings */; };
+		BA7615EF3076A5D600A27E5F /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = BA7615EE3076A5D600A27E5F /* InfoPlist.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,8 +31,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		BA59C3302FD220310001C19A /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		BA7614623072539800A27E5F /* .env */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = .env; sourceTree = "<group>"; };
+		BA7615E83076A11000A27E5F /* ensat-logo.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = "ensat-logo.icon"; sourceTree = "<group>"; };
+		BA7615EC3076A47500A27E5F /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		BA7615EE3076A5D600A27E5F /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		BA9D025E2FB7D74E00B23EAC /* ensat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ensat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA9D026D2FB7D74F00B23EAC /* ensatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ensatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BA9D02772FB7D74F00B23EAC /* ensatUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ensatUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -101,12 +105,14 @@
 		BA9D02552FB7D74E00B23EAC = {
 			isa = PBXGroup;
 			children = (
+				BA7615EE3076A5D600A27E5F /* InfoPlist.xcstrings */,
+				BA7615EC3076A47500A27E5F /* Localizable.xcstrings */,
 				BA7614623072539800A27E5F /* .env */,
 				BA76145630620C7D00A27E5F /* fonts */,
-				BA59C3302FD220310001C19A /* Localizable.xcstrings */,
 				BA9D02602FB7D74E00B23EAC /* ensat */,
 				BA9D02702FB7D74F00B23EAC /* ensatTests */,
 				BA9D027A2FB7D74F00B23EAC /* ensatUITests */,
+				BA7615E83076A11000A27E5F /* ensat-logo.icon */,
 				BA9D025F2FB7D74E00B23EAC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -249,7 +255,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BA59C3312FD220310001C19A /* Localizable.xcstrings in Resources */,
+				BA7615ED3076A47500A27E5F /* Localizable.xcstrings in Resources */,
+				BA7615EF3076A5D600A27E5F /* InfoPlist.xcstrings in Resources */,
+				BA7615E93076A11000A27E5F /* ensat-logo.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,7 +448,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BA7614623072539800A27E5F /* .env */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "ensat-logo";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -475,7 +483,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BA7614623072539800A27E5F /* .env */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "ensat-logo";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

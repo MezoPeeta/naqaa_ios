@@ -1,27 +1,13 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "•" : {
-
-    },
-    "Asd" : {
-
-    },
-    "Bad Request" : {
-
-    },
-    "Buffering" : {
-
-    },
-    "Could not find %@ in the app bundle" : {
-
-    },
-    "Done" : {
-
-    },
-    "Failed to decode response: %@" : {
-
-    },
+    "•" : {},
+    "Add to favorites" : {},
+    "Bad Request" : {},
+    "Buffering" : {},
+    "Could not find %@ in the app bundle" : {},
+    "Done" : {},
+    "Failed to decode response: %@" : {},
     "Favorites" : {
       "localizations" : {
         "ar" : {
@@ -62,11 +48,16 @@
         }
       }
     },
-    "Network Error: %@" : {
-
-    },
+    "Network Error: %@" : {},
     "No favorites now" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا يوجد مفضلات"
+          }
+        }
+      }
     },
     "No Reciters" : {
       "localizations" : {
@@ -98,21 +89,19 @@
         }
       }
     },
-    "Pause" : {
-
-    },
-    "Peace be upon you" : {
-
-    },
+    "Pause" : {},
     "Play" : {
-
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تشغيل"
+          }
+        }
+      }
     },
-    "Playback position" : {
-
-    },
-    "Playing" : {
-
-    },
+    "Playback position" : {},
+    "Playing" : {},
     "reciter.default.moshaf" : {
       "localizations" : {
         "ar" : {
@@ -156,6 +145,7 @@
         }
       }
     },
+    "Remove from favorites" : {},
     "Search" : {
       "localizations" : {
         "ar" : {
@@ -176,23 +166,22 @@
         }
       }
     },
+    "Shuffle" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عشوائي"
+          }
+        }
+      }
+    },
     "Surahs" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "السور"
-          }
-        }
-      }
-    },
-    "Surahs -114-" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "السور -١١٤-"
           }
         }
       }
@@ -207,9 +196,7 @@
         }
       }
     },
-    "Try a different name" : {
-
-    },
+    "Try a different name" : {},
     "Unable to Load Reciters" : {
       "localizations" : {
         "ar" : {
@@ -285,8 +272,165 @@
         }
       }
     },
-    "Version %@" : {
-
+    "Language" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اللغة"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language"
+          }
+        }
+      }
+    },
+    "System" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "النظام"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
+          }
+        }
+      }
+    },
+    "Confirm" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تأكيد"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirm"
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إلغاء"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
+    },
+    "Restart required" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إعادة التشغيل مطلوبة"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restart required"
+          }
+        }
+      }
+    },
+    "Close and reopen the app to apply the new language." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أغلق التطبيق ثم افتحه من جديد لتطبيق اللغة الجديدة."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close and reopen the app to apply the new language."
+          }
+        }
+      }
+    },
+    "OK" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حسنًا"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "General" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عام"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "General"
+          }
+        }
+      }
+    },
+    "About" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حول"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About"
+          }
+        }
+      }
+    },
+    "Version" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "الإصدار"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
+          }
+        }
+      }
     }
   },
   "version" : "1.2"

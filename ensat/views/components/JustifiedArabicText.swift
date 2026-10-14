@@ -32,7 +32,7 @@ struct JustifiedArabicText: UIViewRepresentable {
             attributes: [
                 .font: font,
                 .foregroundColor: foregroundColor,
-                .paragraphStyle: style,
+                .paragraphStyle: style
             ]
         )
     }
@@ -47,14 +47,16 @@ struct JustifiedArabicText: UIViewRepresentable {
 
 #Preview {
     JustifiedArabicText(
-        text: "اسمي مازن عمر محمد بشير المتولي عاشور بس انا مكنتش اعرف ان عمر صبرة خالد موكوس اوي كدا اعمل اية انا تعبت  يلا عوضي علي الله و اخرتي اليه",
+        text: "اسمي مازن عمر محمد بشير المتولي عاشور بس انا مكنتش اعرف ان عمر صبرة خالد "
+            + "موكوس اوي كدا اعمل اية انا تعبت  يلا عوضي علي الله و اخرتي اليه",
         font: .systemFont(ofSize: 20)
     )
     .padding()
 }
 
 #Preview("Kashida comparison") {
-    let text = "الحمد لله الذي أنعم علينا بالإسلام وهدانا إلى هذا الدين القويم، نسأله أن يهدينا صراطه المستقيم في جميع أمور حياتنا وأعمالنا."
+    let text = "الحمد لله الذي أنعم علينا بالإسلام وهدانا إلى هذا الدين القويم، "
+        + "نسأله أن يهدينا صراطه المستقيم في جميع أمور حياتنا وأعمالنا."
 
     ScrollView {
         VStack(alignment: .trailing, spacing: 24) {

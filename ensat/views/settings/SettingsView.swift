@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @Environment(LanguageStore.self) private var languageStore
+    @State private var showsLanguagePicker = false
+    @State private var showsRestartAlert = false
+
     private var appVersion: String {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
         let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
@@ -17,18 +21,33 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color.settingsBackground.ignoresSafeArea()
-                VStack {
-                    Text("Asd")
+                Color.homeBackground.ignoresSafeArea()
+                List {
+                    Section("General") {
+                        Button { showsLanguagePicker = true } label: {
+                            HStack {
+                                Text("Language")
+                                Spacer()
+                                Text(languageStore.language.nativeName ?? String(localized: "System"))
+                                    .foregroundStyle(.secondary)
+                            }
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                    }
+                    Section("About") {
+                        LabeledContent("Version", value: appVersion)
+                    }
                 }
-
+                .scrollContentBackground(.hidden)
             }
-            .safeAreaInset(edge: .bottom) {
-                Text("Version \(appVersion)")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity)
-                    .padding(.bottom, 8)
+            .sheet(isPresented: $showsLanguagePicker) {
+                LanguagePickerSheet { showsRestartAlert = languageStore.needsRestart }
+            }
+            .alert("Restart required", isPresented: $showsRestartAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("Close and reopen the app to apply the new language.")
             }
             .navigationTitle("Settings")
         }
@@ -38,4 +57,6 @@ struct SettingsView: View {
 
 #Preview {
     SettingsView()
+        .environment(LanguageStore())
+        .preferredColorScheme(.dark)
 }

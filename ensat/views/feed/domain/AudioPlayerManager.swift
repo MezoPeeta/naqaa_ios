@@ -26,14 +26,41 @@ final class AudioPlayerManager {
     private var currentArtist = ""
 
     func play(surah: Surah, reciter: ReciterMoshafItem) {
-        let fileName = String(format: "%03d.mp3", surah.id)
-        guard let serverURL = URL(string: reciter.moshaf.server) else { return }
-        let url = serverURL.appending(path: fileName)
-
         PostHogExportLogger.info(
             "Surah playback requested",
             attributes: ["surah_id": surah.id]
         )
+        guard let player = load(surah: surah, reciter: reciter) else { return }
+        startPlayback(player)
+        updateNowPlayingInfo()
+    }
+
+    func prepare(surah: Surah, reciter: ReciterMoshafItem, startAt: Double) {
+        guard let player = load(surah: surah, reciter: reciter) else { return }
+        let target = max(startAt, 0)
+        currentTime = target
+        player.seek(
+            to: CMTime(seconds: target, preferredTimescale: 600),
+            toleranceBefore: .zero,
+            toleranceAfter: .zero
+        )
+        updateNowPlayingInfo()
+
+        // Paused players don't tick the time observer, so load the duration for the progress bar.
+        if let asset = player.currentItem?.asset {
+            Task { [weak self] in
+                guard let loaded = try? await asset.load(.duration), loaded.isNumeric else { return }
+                guard let self, self.player?.currentItem?.asset === asset else { return }
+                self.duration = loaded.seconds
+                self.updateNowPlayingInfo()
+            }
+        }
+    }
+
+    private func load(surah: Surah, reciter: ReciterMoshafItem) -> AVPlayer? {
+        let fileName = String(format: "%03d.mp3", surah.id)
+        guard let serverURL = URL(string: reciter.moshaf.server) else { return nil }
+        let url = serverURL.appending(path: fileName)
 
         configureAudioSession()
 
@@ -48,9 +75,7 @@ final class AudioPlayerManager {
 
         currentTitle = surah.displayName
         currentArtist = reciter.reciter.name
-
-        startPlayback(player)
-        updateNowPlayingInfo()
+        return player
     }
 
     func togglePlayPause() {
@@ -78,17 +103,10 @@ final class AudioPlayerManager {
         guard !didConfigureSession else { return }
         didConfigureSession = true
 
-        try? AVAudioSession.sharedInstance().setCategory(
-            .playback,
-            mode: .default,
-            policy: .longFormAudio
-        )
-
         setupRemoteCommands()
         observeInterruptions()
     }
 
-  
     private func startPlayback(_ player: AVPlayer) {
         playbackTask?.cancel()
         playbackTask = Task { [weak self] in
@@ -101,7 +119,9 @@ final class AudioPlayerManager {
     private nonisolated static func activateSession() async {
         await withCheckedContinuation { continuation in
             DispatchQueue.global(qos: .userInitiated).async {
-                try? AVAudioSession.sharedInstance().setActive(true)
+                let session = AVAudioSession.sharedInstance()
+                try? session.setCategory(.playback, mode: .default, policy: .longFormAudio)
+                try? session.setActive(true)
                 continuation.resume()
             }
         }

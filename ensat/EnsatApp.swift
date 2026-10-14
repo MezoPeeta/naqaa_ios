@@ -14,15 +14,18 @@ import UIKit
 @main
 struct EnsatApp: App {
 
+    @State private var languageStore = LanguageStore()
+
     init() {
-        #if !DEBUG
+        #if DEBUG
         configurePostHog()
         #endif
     }
 
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self
+            FavoriteReciter.self,
+            FavoriteTrack.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -36,6 +39,7 @@ struct EnsatApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(languageStore)
         }
         .modelContainer(sharedModelContainer)
     }
