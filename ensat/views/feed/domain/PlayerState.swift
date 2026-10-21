@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import PostHog
 
 @Observable
 @MainActor
@@ -15,6 +16,15 @@ final class PlayerState {
     var surahs: [Surah] = []
 
     let player: any AudioPlaying
+
+    /// Set by the app: whether the device is offline, and whether a track is saved on disk.
+    /// While offline, next/previous skip tracks that can't be played. Defaults keep everything playable.
+    var isOffline: () -> Bool = { false }
+    var isAvailableOffline: (Surah, ReciterMoshafItem) -> Bool = { _, _ in true }
+
+    /// True after a track failed to start (e.g. streaming without a connection).
+    var playbackFailed: Bool { player.didFailToPlay }
+    func dismissPlaybackFailure() { player.clearPlaybackFailure() }
 
     /// Called with the current track and playhead whenever playback state should be persisted.
     var onPersist: ((_ surah: Surah, _ reciter: ReciterMoshafItem, _ time: Double, _ duration: Double) -> Void)?
@@ -78,11 +88,35 @@ final class PlayerState {
         return queue.previous(before: selectedSurah).map { QueueEntry(surah: $0, reciter: selectedReciter) }
     }
 
+    private func entry(after current: QueueEntry) -> QueueEntry? {
+        if let customQueue {
+            return EntryQueue(entries: customQueue).next(after: current.surah, reciter: current.reciter)
+        }
+        return queue.next(after: current.surah).map { QueueEntry(surah: $0, reciter: current.reciter) }
+    }
+
+    private func entry(before current: QueueEntry) -> QueueEntry? {
+        if let customQueue {
+            return EntryQueue(entries: customQueue).previous(before: current.surah, reciter: current.reciter)
+        }
+        return queue.previous(before: current.surah).map { QueueEntry(surah: $0, reciter: current.reciter) }
+    }
+
+    /// Walks from `first` in one direction, skipping tracks that can't play while offline.
+    private func playableEntry(from step: (QueueEntry) -> QueueEntry?, first: QueueEntry?) -> QueueEntry? {
+        var candidate = first
+        while let entry = candidate {
+            if !isOffline() || isAvailableOffline(entry.surah, entry.reciter) { return entry }
+            candidate = step(entry)
+        }
+        return nil
+    }
+
     var canPlayNext: Bool { nextEntry != nil }
     var canPlayPrevious: Bool { previousEntry != nil }
 
     init(player: (any AudioPlaying)? = nil) {
-        var resolved: any AudioPlaying = player ?? AudioPlayerManager()
+        let resolved: any AudioPlaying = player ?? AudioPlayerManager()
         self.player = resolved
         resolved.onTrackEnded = { [weak self] in self?.playNext() }
         resolved.onNextTrack = { [weak self] in self?.playNext() }
@@ -116,7 +150,7 @@ final class PlayerState {
         let nearEnd = duration > 0 && duration - time < Self.exitTransitionWindow
         selectedSurah = surah
         selectedReciter = reciter
-        player.prepare(surah: surah, reciter: reciter, startAt: nearEnd ? 0 : time)
+        player.prepare(surah: surah, reciter: reciter, startAt: nearEnd ? 0 : time, knownDuration: duration)
     }
 
     /// Persists immediately (pause, seek, track change, backgrounding).
@@ -133,6 +167,7 @@ final class PlayerState {
     }
 
     func selectReciter(_ item: ReciterMoshafItem) {
+        guard item != selectedReciter else { return }
         selectedReciter = item
         if let surah = selectedSurah {
             player.play(surah: surah, reciter: item)
@@ -148,25 +183,47 @@ final class PlayerState {
         selectedReciter = match
     }
 
-    func togglePlayPause() {
+    /// Pass `source` to record the user action in analytics; internal callers omit it.
+    func togglePlayPause(source: String? = nil) {
+        if source != nil {
+            PostHogSDK.shared.capture(
+                "playback_toggled",
+                properties: ["action": isPlaying ? "pause" : "play"]
+            )
+        }
         player.togglePlayPause()
         persistNow()
     }
 
-    func seek(toProgress progress: Double) {
+    func seek(toProgress progress: Double, reportsAnalytics: Bool = false) {
+        if reportsAnalytics {
+            PostHogSDK.shared.capture("playback_seeked", properties: ["target_progress": progress])
+        }
         guard player.duration > 0 else { return }
         player.seek(to: min(max(progress, 0), 1) * player.duration)
         persistNow()
     }
 
-    func playNext() {
-        guard let next = nextEntry else { return }
+    func playNext(source: String? = nil) {
+        if let source {
+            PostHogSDK.shared.capture(
+                "playback_skipped",
+                properties: ["direction": "next", "source": source]
+            )
+        }
+        guard let next = playableEntry(from: { self.entry(after: $0) }, first: nextEntry) else { return }
         selectedReciter = next.reciter
         startPlayback(next.surah)
     }
 
-    func playPrevious() {
-        guard let previous = previousEntry else { return }
+    func playPrevious(source: String? = nil) {
+        if let source {
+            PostHogSDK.shared.capture(
+                "playback_skipped",
+                properties: ["direction": "previous", "source": source]
+            )
+        }
+        guard let previous = playableEntry(from: { self.entry(before: $0) }, first: previousEntry) else { return }
         selectedReciter = previous.reciter
         startPlayback(previous.surah)
     }

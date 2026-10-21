@@ -49,23 +49,17 @@ struct FavoriteTrackButton: View {
     }
 }
 
-/// Heart for a reciter row.
+/// Heart for a reciter row. The list owns the favorites query and passes `isFavorite` in, so
+/// rows do not each keep their own SwiftData observation.
 struct FavoriteReciterButton: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var favorites: [FavoriteReciter]
     /// Bumped only when favoriting, so the pop plays on add and not on remove.
     @State private var popCount = 0
 
     let item: ReciterMoshafItem
-
-    init(item: ReciterMoshafItem) {
-        self.item = item
-        let key = item.id
-        _favorites = Query(filter: #Predicate<FavoriteReciter> { $0.key == key })
-    }
+    let isFavorite: Bool
 
     var body: some View {
-        let isFavorite = !favorites.isEmpty
         Button {
             if !isFavorite { popCount += 1 }
             FavoritesStore(context: modelContext).toggleReciter(item)
@@ -131,8 +125,8 @@ private enum PreviewData {
 
 #Preview("Reciter heart") {
     HStack(spacing: 32) {
-        FavoriteReciterButton(item: PreviewData.favorited)
-        FavoriteReciterButton(item: PreviewData.notFavorited)
+        FavoriteReciterButton(item: PreviewData.favorited, isFavorite: true)
+        FavoriteReciterButton(item: PreviewData.notFavorited, isFavorite: false)
     }
     .modelContainer(PreviewData.container())
     .preferredColorScheme(.dark)

@@ -19,7 +19,7 @@ struct PlayerSurahTitle: View {
         configuration.scheduledEraseDuration = 4
         configuration.revealDuration = 2
         configuration.style = .path
-        configuration.eraseTint = .selectedText
+        configuration.eraseTint = .green
 
         return configuration
     }()
@@ -71,6 +71,63 @@ struct PlayerSurahTitle: View {
 }
 
 #if DEBUG
+/// Keeps swapping the surah so the erase and reveal animation repeats without tapping anything,
+/// with the same configuration controls as the playground.
+private struct PlayerSurahTitleLooping: View {
+    @State private var id = 1
+    @State private var isLooping = true
+    @State private var interval = 4.0
+    @State private var configuration = PlayerSurahTitle.defaultConfiguration
+    private let surahIds = [1, 2, 36, 112, 114]
+
+    var body: some View {
+        VStack(spacing: 0) {
+            PlayerSurahTitle(id: id, configuration: configuration)
+                .frame(height: 220)
+                .padding(.horizontal)
+
+            Form {
+                Section("Loop") {
+                    Toggle("Loop", isOn: $isLooping)
+                    HStack {
+                        Text("Every")
+                        Slider(value: $interval, in: 1...10, step: 0.5)
+                        Text("\(interval, format: .number.precision(.fractionLength(1)))s")
+                            .monospacedDigit()
+                    }
+                    Button("Next now") { advance() }
+                }
+
+                AnimatedTextConfigurationSections(configuration: $configuration)
+            }
+        }
+        // Restarts whenever the loop is toggled or the interval changes.
+        .task(id: LoopSettings(isLooping: isLooping, interval: interval)) {
+            guard isLooping else { return }
+            while !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(interval))
+                guard !Task.isCancelled else { return }
+                advance()
+            }
+        }
+    }
+
+    private struct LoopSettings: Equatable {
+        let isLooping: Bool
+        let interval: Double
+    }
+
+    private func advance() {
+        let index = surahIds.firstIndex(of: id) ?? 0
+        id = surahIds[(index + 1) % surahIds.count]
+    }
+}
+
+#Preview("Looping") {
+    PlayerSurahTitleLooping()
+        .preferredColorScheme(.dark)
+}
+
 private struct PlayerSurahTitlePlayground: View {
     @State private var id = 1
     @State private var isErasing = false
@@ -101,8 +158,4 @@ private struct PlayerSurahTitlePlayground: View {
     }
 }
 
-#Preview("Title playground") {
-    PlayerSurahTitlePlayground()
-        .preferredColorScheme(.dark)
-}
 #endif

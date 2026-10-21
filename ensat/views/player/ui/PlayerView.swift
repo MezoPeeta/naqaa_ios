@@ -6,20 +6,13 @@
 //
 
 import SwiftUI
-import Foundation
-import PostHog
+import SwiftData
 
 struct PlayerView: View {
     let playerState: PlayerState
 
-    private static let exitScale: CGFloat = 0.86
-    private static let exitBlur: CGFloat = 12
-
-    private static let transitionDuration: Double = 1
-
-    @State private var titleScale: CGFloat = 1
-    @State private var titleBlur: CGFloat = 0
-    @State private var scrubProgress: Double?
+    @ScaledMetric private var playButtonSize: CGFloat = 72
+    @Namespace private var actionsGlass
 
     var body: some View {
         ContainerShapeView { _ in
@@ -38,23 +31,18 @@ struct PlayerView: View {
                 .ignoresSafeArea()
             }
         }
-        .onChange(of: playerState.exitTransitionAmount, initial: true) { _, amount in
-            applyExitTransition(amount)
-        }
     }
 
     private var stackedLayout: some View {
         VStack(spacing: 24) {
             Spacer()
 
-            PlayerSurahTitle(id: playerState.selectedSurah?.id ?? 1)
-                .scaleEffect(titleScale)
-                .blur(radius: titleBlur)
+            surahTitle
             Spacer()
 
             metadataAndControls
         }
-        .buttonStyle(.plain)
+
         .padding()
         .frame(maxHeight: .infinity)
         .safeAreaPadding(.bottom)
@@ -62,100 +50,132 @@ struct PlayerView: View {
 
     private var sideBySideLayout: some View {
         HStack(spacing: 24) {
-            PlayerSurahTitle(id: playerState.selectedSurah?.id ?? 1)
-                .scaleEffect(titleScale)
-                .blur(radius: titleBlur)
-                .frame(maxWidth: .infinity)
+            surahTitle
+            .frame(maxWidth: .infinity)
             metadataAndControls
                 .frame(maxWidth: .infinity)
         }
-        .buttonStyle(.plain)
         .padding()
         .fixedSize(horizontal: false, vertical: true)
         .frame(maxHeight: .infinity)
         .safeAreaPadding(.horizontal)
     }
 
+    private var shareMessage: String {
+        let surah = playerState.selectedSurah?.displayName ?? ""
+        let reciter = playerState.selectedReciter.reciter.name
+        let link = "https://ensat.app/share/\(UUID().uuidString)"
+        return String(localized: "Listening to \(surah) by \(reciter)") + "\n" + link
+    }
+
+    private var surahTitle: some View {
+        PlayerTitleSweep(playerState: playerState)
+    }
+
     private var metadataAndControls: some View {
         VStack {
-            titleAndReciter
+            HStack {
+                titleAndReciter
+                Spacer()
 
-            PlayerProgressBar(
-                progress: playerState.progress, scrubProgress: $scrubProgress) { progress in
-                    PostHogSDK.shared.capture(
-                        "playback_seeked",
-                        properties: ["target_progress": progress]
-                    )
-                    playerState.seek(toProgress: progress)
+                GlassEffectContainer {
+                    HStack(spacing: 12) {
+                        if let surah = playerState.selectedSurah {
+                            FavoriteTrackButton(surahId: surah.id, item: playerState.selectedReciter)
+                                .padding(4)
+
+                                .glassEffect()
+                                .glassEffectUnion(id: "trackActions", namespace: actionsGlass)
+                        }
+                        ShareButton(message: shareMessage)
+                            .padding(4)
+
+                            .glassEffect()
+                            .glassEffectUnion(id: "trackActions", namespace: actionsGlass)
+                    }
                 }
-                .padding(.horizontal)
+            }
+            .padding()
 
-            timeLabels
+            PlayerProgressSection(playerState: playerState)
 
             transportControls
                 .disabled(playerState.isEmpty)
+
+            secondaryControls
         }
     }
 
+    private var secondaryControls: some View {
+        HStack(spacing: 0) {
+            Spacer()
+            if let surah = playerState.selectedSurah {
+                DownloadTrackButton(surah: surah, item: playerState.selectedReciter)
+            }
+            Spacer()
+            AudioRoutePickerButton()
+
+            Spacer()
+
+            // Placeholder: lyrics aren't implemented yet.
+            Button {} label: {
+                Image(systemName: "quote.bubble")
+                    .font(.title2)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+            }
+            .accessibilityLabel("Lyrics")
+            Spacer()
+        }
+        .buttonStyle(.borderless)
+        .foregroundStyle(.primary)
+        .padding(.top, 40)
+    }
+
     private var titleAndReciter: some View {
-        VStack {
+        VStack(alignment: .leading) {
             Text(playerState.selectedSurah?.displayName ?? "")
                 .font(.title3)
-                    .bold()
-                    .fontWidth(.expanded)
-                    .contentTransition(.interpolate)
+                .bold()
+                .fontWidth(.expanded)
+                .contentTransition(.numericText(value: Double(playerState.selectedSurah?.id ?? 0)))
+                .animation(.smooth, value: playerState.selectedSurah?.id)
 
             Text(playerState.selectedReciter.reciter.name)
                 .foregroundStyle(.secondary)
         }
     }
 
-    private var timeLabels: some View {
-        HStack {
-            Text(formattedTime(displayedTime))
-            Spacer()
-            Text(formattedTime(playerState.player.duration))
-        }
-        .font(.caption)
-        .foregroundStyle(.secondary)
-        .padding(.horizontal)
-    }
-
     private var transportControls: some View {
         HStack(spacing: 32) {
             Button {
-                PostHogSDK.shared.capture(
-                    "playback_skipped",
-                    properties: ["direction": "previous", "source": "full_player"]
-                )
-                playerState.playPrevious()
+                playerState.playPrevious(source: "full_player")
             } label: {
                 DirectionalImage("backward.fill")
                     .font(.title)
+                    .frame(minWidth: 44, minHeight: 44)
+                    .contentShape(Rectangle())
             }
+            .accessibilityLabel("Previous Surah")
 
             Button {
-                PostHogSDK.shared.capture(
-                    "playback_toggled",
-                    properties: ["action": playerState.isPlaying ? "pause" : "play"]
-                )
-                playerState.togglePlayPause()
+                playerState.togglePlayPause(source: "full_player")
             } label: {
                 ZStack {
-
                     DirectionalImage(playerState.isPlaying ? "pause.fill" : "play.fill")
-                        .font(.title)
+                        .font(.largeTitle)
                         .contentTransition(
                             .symbolEffect(.replace.magic(fallback: .downUp.byLayer), options: .nonRepeating)
                         )
+                        .opacity(playerState.isBuffering ? 0.3 : 1)
 
-//                    if playerState.isBuffering {
-//                        ProgressView()
-//                    }
+                    if playerState.isBuffering {
+                        ProgressView()
+                    }
                 }
-                .frame(width: 44, height: 44)
+                .frame(width: playButtonSize, height: playButtonSize)
+                .contentShape(Rectangle())
             }
-            .animation(.easeInOut(duration: 0.2), value: playerState.isPlaying)
             .accessibilityLabel(
                 playerState.isBuffering
                 ? "Buffering"
@@ -163,85 +183,31 @@ struct PlayerView: View {
             )
 
             Button {
-                PostHogSDK.shared.capture(
-                    "playback_skipped",
-                    properties: ["direction": "next", "source": "full_player"]
-                )
-                playerState.playNext()
+                playerState.playNext(source: "full_player")
             } label: {
                 DirectionalImage("forward.fill")
                     .font(.title)
+                    .frame(minWidth: 44, minHeight: 44)
+                    .contentShape(Rectangle())
             }
+            .accessibilityLabel("Next Surah")
         }
-    }
-
-    /// The playhead shown in the time labels, which follows the finger while scrubbing.
-    private var displayedTime: Double {
-        let duration = playerState.player.duration
-        guard let scrubProgress, duration > 0 else { return playerState.player.currentTime }
-        return scrubProgress * duration
+        .buttonStyle(.borderless)
+        .foregroundStyle(.primary)
     }
 
     private func topPatternHeight(for size: CGSize) -> CGFloat {
         let proportional = size.height * 0.35
         return min(max(proportional, 100), 300)
     }
-
-    private func applyExitTransition(_ amount: Double) {
-        let scale = Self.exitScale + (1 - Self.exitScale) * (1 - amount)
-        let blur = Self.exitBlur * amount
-        withAnimation(.linear(duration: Self.transitionDuration)) {
-            titleScale = scale
-            titleBlur = blur
-        }
-    }
-
-    private func formattedTime(_ seconds: Double) -> String {
-        guard seconds.isFinite, seconds > 0 else { return "0:00" }
-        let totalSeconds = Int(seconds)
-        let hours = totalSeconds / 3600
-        let minutes = (totalSeconds % 3600) / 60
-        let remaining = totalSeconds % 60
-        if hours > 0 {
-            return "\(hours):\(String(format: "%02d", minutes)):\(String(format: "%02d", remaining))"
-        }
-        return "\(minutes):\(String(format: "%02d", remaining))"
-    }
 }
 
 #if DEBUG
-@MainActor
-private final class PreviewAudioPlayer: AudioPlaying {
-    var isPlaying = true
-    var isBuffering = false
-    var currentTime: Double = 150
-    var duration: Double = 300
-    var onTrackEnded: (() -> Void)?
-    var onNextTrack: (() -> Void)?
-    var onPreviousTrack: (() -> Void)?
-    func play(surah: Surah, reciter: ReciterMoshafItem) {}
-    func prepare(surah: Surah, reciter: ReciterMoshafItem, startAt: Double) {}
-    func togglePlayPause() {}
-    func seek(to time: Double) {}
-}
-
-@MainActor
-private func makePreviewState() -> PlayerState {
-    let state = PlayerState(player: PreviewAudioPlayer())
-    let surah = Surah(
-        id: 2,
-        name: "البقرة",
-        revelationPlace: .medinan,
-        totalVerses: 286,
-        transliteration: "Al-Baqarah"
-    )
-    state.surahs = [surah]
-    state.selectedSurah = surah
-    return state
-}
-
 #Preview {
-    PlayerView(playerState: makePreviewState())
+    PlayerView(playerState: .preview())
+        // swiftlint:disable:next force_try
+        .modelContainer(try! .preview)
+        .environment(DownloadManager.preview)
         .preferredColorScheme(.dark)
         .background(.homeBackground)
 }

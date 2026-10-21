@@ -11,6 +11,7 @@ struct SettingsView: View {
     @Environment(LanguageStore.self) private var languageStore
     @State private var showsLanguagePicker = false
     @State private var showsRestartAlert = false
+    @AppStorage(DownloadManager.allowsCellularKey) private var allowsCellularDownloads = false
 
     private var appVersion: String {
         let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
@@ -34,6 +35,13 @@ struct SettingsView: View {
                             .contentShape(Rectangle())
                         }
                         .buttonStyle(.plain)
+                    }
+                    Section {
+                        Toggle("Download over cellular", isOn: $allowsCellularDownloads)
+                    } header: {
+                        Text("Downloads")
+                    } footer: {
+                        Text("Downloads use Wi-Fi only unless this is on.")
                     }
                     Section("About") {
                         LabeledContent("Version", value: appVersion)

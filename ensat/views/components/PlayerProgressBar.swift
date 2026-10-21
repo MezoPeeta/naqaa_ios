@@ -42,8 +42,10 @@ private struct PlayerProgressBarPreview: View {
         .padding(.horizontal)
     }
 }
-#endif
 
 #Preview {
     PlayerProgressBarPreview()
 }
+
+#endif
+

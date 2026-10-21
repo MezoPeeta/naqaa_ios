@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HomeView: View {
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(NetworkMonitor.self) private var network
     @State private var playerState: PlayerState
     @State private var expandMiniPlayer = false
     @Namespace private var animation
@@ -12,11 +13,30 @@ struct HomeView: View {
 
     var body: some View {
         NativeTabView(playerState: playerState)
-            .onChange(of: playerState.player.currentTime) {
-                if playerState.isPlaying { playerState.persistThrottled() }
+         
+            .task {
+                for await _ in Observations({ playerState.player.currentTime }) {
+                    if playerState.isPlaying { playerState.persistThrottled() }
+                }
             }
             .onChange(of: scenePhase) { _, phase in
                 if phase != .active { playerState.persistNow() }
+            }
+            .onAppear {
+                PlayerSession.wireOffline(playerState) { [network] in network.isOffline }
+            }
+            .alert(
+                "Can't play this surah",
+                isPresented: Binding(
+                    get: { playerState.playbackFailed },
+                    set: { if !$0 { playerState.dismissPlaybackFailure() } }
+                )
+            ) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text(network.isOffline
+                     ? "You're offline. Download surahs to listen without a connection."
+                     : "Check your internet connection and try again.")
             }
             .tabBarMinimizeBehavior(.onScrollDown)
             .tabViewBottomAccessory(isEnabled: !playerState.isEmpty) {
@@ -25,6 +45,8 @@ struct HomeView: View {
                     .onTapGesture {
                         expandMiniPlayer.toggle()
                     }
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityHint("Opens the full player")
             }
             .fullScreenCover(isPresented: $expandMiniPlayer) {
 
@@ -46,34 +68,15 @@ struct HomeView: View {
 }
 
 extension HomeView {
-    /// Builds the player and reopens the last track paused at its saved position. Runs while the
-    /// launch screen is up, so the first frame already shows the restored mini-player.
-    private static func makeRestoredPlayerState(store: PlaybackStore = PlaybackStore()) -> PlayerState {
-        let state = PlayerState()
-        state.onPersist = { surah, reciter, time, duration in
-            store.save(PlaybackSnapshot(surahId: surah.id, item: reciter, currentTime: time, duration: duration))
-        }
-
-        let surahViewModel = SurahListViewModel()
-        surahViewModel.loadLocal()
-        guard case .loaded(let surahs) = surahViewModel.state else { return state }
-        state.surahs = surahs
-
-        guard let snapshot = store.load(),
-              let surah = surahs.first(where: { $0.id == snapshot.surahId })
-                else { return state }
-        state.restore(
-            surah: surah,
-            reciter: snapshot.item,
-            time: snapshot.currentTime,
-            duration: snapshot.duration
-        )
-        return state
+    /// Runs while the launch screen is up, so the first frame already shows the restored mini-player.
+    private static func makeRestoredPlayerState() -> PlayerState {
+        PlayerSession.make(surahs: PlayerSession.bundledSurahs())
     }
 }
 
 #Preview {
     HomeView()
+        .environment(NetworkMonitor())
         .preferredColorScheme(.dark)
 
 }

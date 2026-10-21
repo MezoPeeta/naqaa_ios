@@ -1,3 +1,4 @@
+import SwiftData
 import SwiftUI
 import PostHog
 
@@ -5,8 +6,17 @@ struct ReciterListView: View {
     @Bindable var reciterViewModel: ReciterViewModel
     let playerState: PlayerState
     var query = ""
+    /// Shows only reciters that have at least one surah saved on this device.
+    var downloadedOnly = false
     var onSelect: ((ReciterMoshafItem) -> Void)?
-    var hidesNavigationBar = false
+
+    /// One observation for the whole list instead of one per row.
+    @Query private var favoriteReciters: [FavoriteReciter]
+
+    @Query private var downloads: [DownloadedTrack]
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private var favoriteKeys: Set<String> { Set(favoriteReciters.map(\.key)) }
 
     var body: some View {
         Group {
@@ -17,7 +27,9 @@ struct ReciterListView: View {
                 ProgressView()
                     .frame(maxWidth: .infinity)
             case .loaded:
-                let reciters = reciterViewModel.filteredReciters(for: query.isEmpty ? reciterViewModel.query : query)
+                let downloadCounts = DownloadedTrack.counts(in: downloads)
+                let matches = reciterViewModel.filteredReciters(for: query.isEmpty ? reciterViewModel.query : query)
+                let reciters = downloadedOnly ? matches.filter { downloadCounts[$0.id] != nil } : matches
                 if reciters.isEmpty {
                     ContentUnavailableView(
                         "No Reciters Found",
@@ -27,6 +39,7 @@ struct ReciterListView: View {
                 } else {
                     LazyVStack(alignment: .leading, spacing: 0) {
                         ForEach(reciters) { item in
+                            VStack(spacing: 0) {
                             HStack {
                                 Button {
                                     PostHogSDK.shared.capture(
@@ -48,6 +61,7 @@ struct ReciterListView: View {
                                             Text(item.formattedMoshafName)
                                                 .font(.caption)
                                                 .foregroundStyle(.secondary)
+                                            DownloadedCountLabel(count: downloadCounts[item.id, default: 0])
                                         }
                                         Spacer()
                                         if reciterViewModel.isSelected(id: item.id) {
@@ -61,11 +75,14 @@ struct ReciterListView: View {
                                 }
                                 .buttonStyle(.plain)
 
-                                FavoriteReciterButton(item: item)
+                                FavoriteReciterButton(item: item, isFavorite: favoriteKeys.contains(item.id))
                             }
                             Divider()
+                            }
+                            .transition(.opacity)
                         }
                     }
+                    .animation(reduceMotion ? nil : .smooth, value: downloadedOnly)
 
                 }
             case .error(let error):
@@ -79,7 +96,5 @@ struct ReciterListView: View {
         .task {
             await reciterViewModel.load()
         }
-        .toolbar(hidesNavigationBar ? .hidden : .visible, for: .navigationBar)
-
     }
 }

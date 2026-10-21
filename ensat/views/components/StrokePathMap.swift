@@ -14,16 +14,16 @@ import SwiftUI
 /// The order is the shortest distance travelled through ink from that starting edge, so it
 /// follows the letters around curves instead of cutting straight across them.
 enum StrokePathMap {
-    private static let maxDimension = 320.0
-    private static let inkThreshold: UInt8 = 40
-    private static let dilationPasses = 4
+    nonisolated private static let maxDimension = 320.0
+    nonisolated private static let inkThreshold: UInt8 = 40
+    nonisolated private static let dilationPasses = 4
 
     /// Rasterizes `text` with `font`, so the map follows the same glyph shapes as the real text.
     @MainActor
-    static func makeImage(text: String, font: Font?, startsOnRight: Bool) async -> Image? {
+    static func makeImage(text: String, font: Font?, startsOnRight: Bool, penSlant: Double = 0) async -> Image? {
         guard let bitmap = rasterize(text: text, font: font) else { return nil }
         let order = await Task.detached(priority: .userInitiated) {
-            orderMap(bitmap: bitmap, startsOnRight: startsOnRight)
+            orderMap(bitmap: bitmap, startsOnRight: startsOnRight, penSlant: penSlant)
         }.value
         return grayImage(order, width: bitmap.width, height: bitmap.height)
     }
@@ -83,68 +83,49 @@ enum StrokePathMap {
 
     // MARK: Order map
 
-    nonisolated private static func orderMap(bitmap: AlphaBitmap, startsOnRight: Bool) -> [UInt8] {
+    /// Orders ink the way a pen would write it: progress runs along each stroke's centerline
+    /// (its skeleton), so the wavefront crosses a stroke instead of wiping all of its thickness at
+    /// once. Each piece starts at one point, small pieces such as dots come right after the
+    /// letter they sit next to, and `penSlant` leans the wavefront like an angled nib.
+    nonisolated static func orderMap(
+        bitmap: AlphaBitmap,
+        startsOnRight: Bool,
+        penSlant: Double = 0
+    ) -> [UInt8] {
         let grid = InkGrid(
             ink: bitmap.alpha.map { $0 > inkThreshold },
             width: bitmap.width,
             height: bitmap.height
         )
+        let labels = componentLabels(grid)
+        let pieces = componentInfo(grid, labels: labels)
+        guard !pieces.isEmpty else { return [UInt8](repeating: 0, count: grid.ink.count) }
 
+        let skeleton = thinned(grid)
         var cost = [Int32](repeating: .max, count: grid.ink.count)
+
+        // Letters first; marks are placed once the letters have an order.
+        let letters = pieces.filter { !$0.isMark }.isEmpty ? pieces : pieces.filter { !$0.isMark }
+        let marks = pieces.filter { piece in !letters.contains { $0.label == piece.label } }
+
         var heap = MinHeap()
-        seedSources(grid, startsOnRight: startsOnRight, cost: &cost, heap: &heap)
-        relax(grid, cost: &cost, heap: &heap)
+        let strokes = Strokes(grid: grid, skeleton: skeleton, labels: labels)
+        seedStarts(letters, in: strokes, startsOnRight: startsOnRight, cost: &cost, heap: &heap)
+        relax(grid, mask: skeleton, cost: &cost, heap: &heap)
+        placeMarks(marks, in: strokes, cost: &cost)
+
+        spreadToInk(grid, cost: &cost)
+        applySlant(penSlant, grid: grid, cost: &cost)
 
         var order = normalized(cost: cost)
         dilate(&order, grid: grid)
         return order
     }
 
-    /// Starts the path at the extreme edge of every connected piece of ink. Pieces away from
-    /// the global starting edge, such as dots, start later in proportion to that distance.
-    nonisolated private static func seedSources(
-        _ grid: InkGrid,
-        startsOnRight: Bool,
-        cost: inout [Int32],
-        heap: inout MinHeap
-    ) {
-        let labels = componentLabels(grid)
-
-        var extremes: [Int: Int] = [:]
-        for index in grid.ink.indices where labels[index] >= 0 {
-            let column = index % grid.width
-            let current = extremes[labels[index]] ?? column
-            extremes[labels[index]] = startsOnRight ? max(current, column) : min(current, column)
-        }
-        guard let globalExtreme = startsOnRight ? extremes.values.max() : extremes.values.min() else {
-            return
-        }
-
-        for index in grid.ink.indices where labels[index] >= 0 {
-            guard let extreme = extremes[labels[index]], abs(index % grid.width - extreme) <= 1 else {
-                continue
-            }
-            cost[index] = Int32(abs(extreme - globalExtreme)) * 10
-            heap.push(cost: cost[index], index: Int32(index))
-        }
-    }
-
-    /// Dijkstra over ink pixels.
-    nonisolated private static func relax(_ grid: InkGrid, cost: inout [Int32], heap: inout MinHeap) {
-        while let (current, rawIndex) = heap.pop() {
-            let index = Int(rawIndex)
-            guard current <= cost[index] else { continue }
-            grid.forEachNeighbour(of: index) { next, step in
-                guard grid.ink[next], current + step < cost[next] else { return }
-                cost[next] = current + step
-                heap.push(cost: cost[next], index: Int32(next))
-            }
-        }
-    }
-
     nonisolated private static func normalized(cost: [Int32]) -> [UInt8] {
-        let reached = cost.filter { $0 != .max }
-        let longest = Double(max(reached.max() ?? 1, 1))
+        var maxCost: Int32 = 1
+        for value in cost where value != .max && value > maxCost { maxCost = value }
+        let longest = Double(maxCost)
         return cost.map { $0 == .max ? 0 : UInt8(min(Double($0) / longest * 255, 255)) }
     }
 
@@ -152,28 +133,28 @@ enum StrokePathMap {
     /// not blend in the empty background.
     nonisolated private static func dilate(_ order: inout [UInt8], grid: InkGrid) {
         var known = grid.ink
+        // Each pass copies from pixels known before it started, so a pass only grows one ring.
+        var updates: [(index: Int, source: Int)] = []
         for _ in 0..<dilationPasses {
-            var nextOrder = order
-            var nextKnown = known
+            updates.removeAll(keepingCapacity: true)
             for index in known.indices where !known[index] {
                 var source: Int?
                 grid.forEachNeighbour(of: index) { neighbour, _ in
                     if source == nil, known[neighbour] { source = neighbour }
                 }
-                if let source {
-                    nextOrder[index] = order[source]
-                    nextKnown[index] = true
-                }
+                if let source { updates.append((index, source)) }
             }
-            order = nextOrder
-            known = nextKnown
+            for update in updates {
+                order[update.index] = order[update.source]
+                known[update.index] = true
+            }
         }
     }
 
     /// Labels 8-connected pieces of ink, with -1 for background.
-    nonisolated private static func componentLabels(_ grid: InkGrid) -> [Int] {
-        var labels = [Int](repeating: -1, count: grid.ink.count)
-        var nextLabel = 0
+    nonisolated private static func componentLabels(_ grid: InkGrid) -> [Int32] {
+        var labels = [Int32](repeating: -1, count: grid.ink.count)
+        var nextLabel: Int32 = 0
         for start in grid.ink.indices where grid.ink[start] && labels[start] < 0 {
             labels[start] = nextLabel
             var stack = [start]
@@ -190,14 +171,14 @@ enum StrokePathMap {
     }
 }
 
-private nonisolated struct AlphaBitmap: Sendable {
+nonisolated struct AlphaBitmap: Sendable {
     let width: Int
     let height: Int
     let alpha: [UInt8]
 }
 
 /// Which pixels are ink, with 8-connected neighbour stepping.
-private nonisolated struct InkGrid {
+nonisolated struct InkGrid {
     /// Offsets to the 8 neighbours with the cost of each step: 10 straight, 14 diagonal.
     private struct Step {
         let deltaX: Int
@@ -233,7 +214,7 @@ private nonisolated struct InkGrid {
 }
 
 /// Minimal binary min-heap keyed by cost, for Dijkstra.
-private nonisolated struct MinHeap {
+nonisolated struct MinHeap {
     private var items: [(cost: Int32, index: Int32)] = []
 
     mutating func push(cost: Int32, index: Int32) {

@@ -15,17 +15,25 @@ import UIKit
 struct EnsatApp: App {
 
     @State private var languageStore = LanguageStore()
+    @State private var networkMonitor = NetworkMonitor()
+
+    private let sharedModelContainer: ModelContainer
+    @State private var downloadManager: DownloadManager
 
     init() {
-        #if DEBUG
-        configurePostHog()
+        #if !DEBUG
+        Self.configurePostHog()
         #endif
+        let container = Self.makeModelContainer()
+        sharedModelContainer = container
+        _downloadManager = State(initialValue: DownloadManager(container: container))
     }
 
-    var sharedModelContainer: ModelContainer = {
+    private static func makeModelContainer() -> ModelContainer {
         let schema = Schema([
             FavoriteReciter.self,
-            FavoriteTrack.self
+            FavoriteTrack.self,
+            DownloadedTrack.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
@@ -34,24 +42,29 @@ struct EnsatApp: App {
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
-    }()
+    }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(languageStore)
+                .environment(downloadManager)
+                .environment(networkMonitor)
         }
         .modelContainer(sharedModelContainer)
+        // Lets the system relaunch the app to deliver finished downloads; the manager's session
+        // (same identifier) receives the delegate callbacks.
+        .backgroundTask(.urlSession(DownloadManager.sessionIdentifier)) { }
     }
 
-    private func configurePostHog() {
-        guard let projectToken = postHogConfigurationValue("POSTHOG_PROJECT_TOKEN") else {
-            reportMissingPostHogConfiguration("POSTHOG_PROJECT_TOKEN")
+    private static func configurePostHog() {
+        guard let projectToken = Self.postHogConfigurationValue("POSTHOG_PROJECT_TOKEN") else {
+            Self.reportMissingPostHogConfiguration("POSTHOG_PROJECT_TOKEN")
             return
         }
 
-        guard let host = postHogConfigurationValue("POSTHOG_HOST") else {
-            reportMissingPostHogConfiguration("POSTHOG_HOST")
+        guard let host = Self.postHogConfigurationValue("POSTHOG_HOST") else {
+            Self.reportMissingPostHogConfiguration("POSTHOG_HOST")
             return
         }
 
@@ -61,14 +74,14 @@ struct EnsatApp: App {
         PostHogSDK.shared.setup(config)
     }
 
-    private func postHogConfigurationValue(_ variable: String) -> String? {
+    private static func postHogConfigurationValue(_ variable: String) -> String? {
         let value = ProcessInfo.processInfo.environment[variable]
             ?? Bundle.main.object(forInfoDictionaryKey: variable) as? String
         guard let value, !value.isEmpty, !value.hasPrefix("$(") else { return nil }
         return value
     }
 
-    private func reportMissingPostHogConfiguration(_ variable: String) {
+    private static func reportMissingPostHogConfiguration(_ variable: String) {
         #if DEBUG
         let message = "\(variable) variable required by PostHog is missing or un-configured, "
             + "this causes events to be silently missed. This error stops appearing once \(variable) is configured"

@@ -31,12 +31,9 @@ final class EnsatUITests: XCTestCase {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
         app.launch()
-
-        let hafsButton = app.buttons["ابراهيم الأخضر، حفص عن عاصم - مرتل"]
-        hafsButton.firstMatch.tap()
-
-        let misharyButton = app.buttons["ماهر المعيقلي، حفص عن عاصم - مرتل"]
-        misharyButton.staticTexts["ماهر المعيقلي"].firstMatch.tap()
+        app.activate()
+        app/*@START_MENU_TOKEN@*/.buttons["chevron.left"]/*[[".otherElements",".buttons[\"الخلف\"]",".buttons[\"chevron.left\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
+        app/*@START_MENU_TOKEN@*/.buttons["ماهر المعيقلي‏، المصحف المجود"]/*[[".otherElements.buttons[\"ماهر المعيقلي‏، المصحف المجود\"]",".buttons[\"ماهر المعيقلي‏، المصحف المجود\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
 
         XCTAssert(app.staticTexts["ماهر المعيقلي"].firstMatch.exists)
     }

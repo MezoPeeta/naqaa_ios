@@ -1,19 +1,323 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "•" : {},
-    "Add to favorites" : {},
-    "Bad Request" : {},
-    "Buffering" : {},
-    "Could not find %@ in the app bundle" : {},
-    "Done" : {},
-    "Failed to decode response: %@" : {},
+    "" : {
+
+    },
+    " · " : {
+
+    },
+    "%lld" : {
+
+    },
+    "%lld downloaded" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تنزيلات %lld"
+          }
+        }
+      }
+    },
+    "About" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حول"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About"
+          }
+        }
+      }
+    },
+    "Add reciter to favorites" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إضافة القارئ إلى المفضلة"
+          }
+        }
+      }
+    },
+    "Add to favorites" : {
+
+    },
+    "Audio output" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "مخرج الصوت"
+          }
+        }
+      }
+    },
+    "Bad Request" : {
+
+    },
+    "Buffering" : {
+
+    },
+    "By continuing, you agree to our\nTerms of Service and Privacy Policy" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "بالمتابعة، فإنك توافق على\nشروط الخدمة وسياسة الخصوصية"
+          }
+        }
+      }
+    },
+    "Can't play this surah" : {
+
+    },
+    "Cancel" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إلغاء"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
+    },
+    "Change reciter" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تغيير القارئ"
+          }
+        }
+      }
+    },
+    "Check your internet connection and try again." : {
+
+    },
+    "Close and reopen the app to apply the new language." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أغلق التطبيق ثم افتحه من جديد لتطبيق اللغة الجديدة."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close and reopen the app to apply the new language."
+          }
+        }
+      }
+    },
+    "Confirm" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تأكيد"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirm"
+          }
+        }
+      }
+    },
+    "Could not find %@ in the app bundle" : {
+
+    },
+    "Done" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم"
+          }
+        }
+      }
+    },
+    "Download" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تنزيل"
+          }
+        }
+      }
+    },
+    "Download %@?" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تنزيل %@؟"
+          }
+        }
+      }
+    },
+    "Download failed. Tap to retry" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "فشل التنزيل. اضغط لإعادة المحاولة"
+          }
+        }
+      }
+    },
+    "Download over cellular" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التنزيل عبر شبكة الخلوي"
+          }
+        }
+      }
+    },
+    "Download surahs to listen without an internet connection." : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حمّل السور للاستماع إليها بدون اتصال بالإنترنت"
+          }
+        }
+      }
+    },
+    "Downloaded" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تنزيلات"
+          }
+        }
+      }
+    },
+    "Checking file size" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جارٍ التحقق من حجم الملف"
+          }
+        }
+      }
+    },
+    "Downloaded %lld" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التنزيلات %lld"
+          }
+        }
+      }
+    },
+    "Downloaded. Tap to remove" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تم التنزيل, اضغط للإزالة"
+          }
+        }
+      }
+    },
+    "Downloading. Tap to cancel" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "جاري التنزيل, اضغط للإلغاء"
+          }
+        }
+      }
+    },
+    "Downloads" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التنزيلات"
+          }
+        }
+      }
+    },
+    "Downloads only" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تنزيلات فقط"
+          }
+        }
+      }
+    },
+    "Downloads use Wi-Fi only unless this is on." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "التحميل بيتم عبر الواي فاي بس، إلا لو فعلت الخيار ده"
+          }
+        }
+      }
+    },
+    "Failed to decode response: %@" : {
+
+    },
     "Favorites" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "المفضلات"
+          }
+        }
+      }
+    },
+    "Free up space on your device to download this surah." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يرجى تفريغ بعض المساحة على جهازك لتتمكن من تحميل هذه السورة"
+          }
+        }
+      }
+    },
+    "General" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "عام"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "General"
           }
         }
       }
@@ -27,6 +331,51 @@
           }
         }
       }
+    },
+    "Language" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اللغة"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language"
+          }
+        }
+      }
+    },
+    "Listen to the Quran,\nwherever you are" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استمع إلى القرآن،\nأينما كنت"
+          }
+        }
+      }
+    },
+    "Listening to %@ by %@" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يُنصت إلى %1$@ من القارئ  %2$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Listening to %1$@ by %2$@"
+          }
+        }
+      }
+    },
+    "Lyrics" : {
+
     },
     "Meccan" : {
       "localizations" : {
@@ -48,8 +397,45 @@
         }
       }
     },
-    "Network Error: %@" : {},
+    "Network Error: %@" : {
+
+    },
+    "Next surah" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "السورة التالية"
+          }
+        }
+      }
+    },
+    "Next Surah" : {
+
+    },
+    "No downloads yet" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا تنزيلات حتى الآن"
+          }
+        }
+      }
+    },
+    "No Favorites" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "لا توجد مفضلات"
+          }
+        }
+      }
+    },
     "No favorites now" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -89,7 +475,68 @@
         }
       }
     },
-    "Pause" : {},
+    "Not enough storage" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "المساحة غير كافية"
+          }
+        }
+      }
+    },
+    "Off" : {
+
+    },
+    "Offline" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "غير متصل بالإنترنت"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حسنًا"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "On" : {
+
+    },
+    "Opens the full player" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يفتح المشغّل الكامل"
+          }
+        }
+      }
+    },
+    "Pause" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إيقاف"
+          }
+        }
+      }
+    },
     "Play" : {
       "localizations" : {
         "ar" : {
@@ -100,8 +547,25 @@
         }
       }
     },
-    "Playback position" : {},
-    "Playing" : {},
+    "Playback position" : {
+
+    },
+    "Playing" : {
+
+    },
+    "Previous surah" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "السورة السابقة"
+          }
+        }
+      }
+    },
+    "Previous Surah" : {
+
+    },
     "reciter.default.moshaf" : {
       "localizations" : {
         "ar" : {
@@ -145,7 +609,76 @@
         }
       }
     },
-    "Remove from favorites" : {},
+    "Reciters (%lld)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "القرآء (%lld)"
+          }
+        }
+      }
+    },
+    "Remove" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إزالة"
+          }
+        }
+      }
+    },
+    "Remove Download" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إزالة السورة"
+          }
+        }
+      }
+    },
+    "Remove download?" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إزالة السورة؟"
+          }
+        }
+      }
+    },
+    "Remove from favorites" : {
+
+    },
+    "Remove reciter from favorites" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إزالة القارئ من المفضلة"
+          }
+        }
+      }
+    },
+    "Restart required" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إعادة التشغيل مطلوبة"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restart required"
+          }
+        }
+      }
+    },
     "Search" : {
       "localizations" : {
         "ar" : {
@@ -166,6 +699,9 @@
         }
       }
     },
+    "Share" : {
+
+    },
     "Shuffle" : {
       "localizations" : {
         "ar" : {
@@ -176,12 +712,52 @@
         }
       }
     },
+    "Surah %lld" : {
+
+    },
     "Surahs" : {
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "السور"
+          }
+        }
+      }
+    },
+    "Surahs (%lld)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "السور (%lld)"
+          }
+        }
+      }
+    },
+    "System" : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "النظام"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
+          }
+        }
+      }
+    },
+    "Tap the heart on a surah or reciter to save it here." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "اضغط على أيقونة القلب الموجودة على السورة أو القارئ لحفظها هنا"
           }
         }
       }
@@ -196,7 +772,19 @@
         }
       }
     },
-    "Try a different name" : {},
+    "This file is %@." : {
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "حجم الملف %@"
+          }
+        }
+      }
+    },
+    "Try a different name" : {
+
+    },
     "Unable to Load Reciters" : {
       "localizations" : {
         "ar" : {
@@ -272,150 +860,6 @@
         }
       }
     },
-    "Language" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "اللغة"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Language"
-          }
-        }
-      }
-    },
-    "System" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "النظام"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "System"
-          }
-        }
-      }
-    },
-    "Confirm" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "تأكيد"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Confirm"
-          }
-        }
-      }
-    },
-    "Cancel" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "إلغاء"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cancel"
-          }
-        }
-      }
-    },
-    "Restart required" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "إعادة التشغيل مطلوبة"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Restart required"
-          }
-        }
-      }
-    },
-    "Close and reopen the app to apply the new language." : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "أغلق التطبيق ثم افتحه من جديد لتطبيق اللغة الجديدة."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Close and reopen the app to apply the new language."
-          }
-        }
-      }
-    },
-    "OK" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "حسنًا"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OK"
-          }
-        }
-      }
-    },
-    "General" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "عام"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "General"
-          }
-        }
-      }
-    },
-    "About" : {
-      "localizations" : {
-        "ar" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "حول"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "About"
-          }
-        }
-      }
-    },
     "Version" : {
       "localizations" : {
         "ar" : {
@@ -431,6 +875,9 @@
           }
         }
       }
+    },
+    "You're offline. Download surahs to listen without a connection." : {
+
     }
   },
   "version" : "1.2"

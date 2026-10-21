@@ -64,6 +64,9 @@ struct AnimatedTextConfiguration {
     /// Length of the gradient at the stroke tip as a fraction of the whole path, in `.path`
     /// style.
     var pathBand: Double = 0.12
+    /// How far the stroke front leans, in `.path` style: 0 keeps it upright, larger values reach
+    /// lower rows later, like an angled calligraphy nib.
+    var penSlant: Double = 0.3
     /// Brightness of the glow in the pixels of the stroke tip, in `.path` style. 0 disables it.
     /// Unlike `glowRadius` it never spills outside the letters.
     var pathGlow: Double = 1
@@ -133,6 +136,7 @@ struct AnimatedText: View {
     private struct PathMapRequest: Hashable {
         let text: String
         let startsOnRight: Bool
+        let penSlant: Double
         let isPath: Bool
     }
 
@@ -140,6 +144,7 @@ struct AnimatedText: View {
         PathMapRequest(
             text: text,
             startsOnRight: configuration.pathStart == .right,
+            penSlant: configuration.penSlant,
             isPath: configuration.style == .path
         )
     }
@@ -199,9 +204,9 @@ struct AnimatedText: View {
         let request = pathMapRequest(for: text)
         guard request.isPath else { return }
         guard pathMaps[request] == nil else { return }
-        let startsOnRight = request.startsOnRight
-        guard let map = await StrokePathMap.makeImage(text: text, font: font, startsOnRight: startsOnRight)
-        else { return }
+        guard let map = await StrokePathMapCache.shared.image(for: .init(
+            text: text, font: font, startsOnRight: request.startsOnRight, penSlant: request.penSlant
+        )) else { return }
         // Keep only the maps for the text on screen and the text about to replace it.
         let keep = [pathMapRequest(for: displayed), pathMapRequest(for: self.text), request]
         pathMaps = pathMaps.filter { keep.contains($0.key) }
@@ -460,6 +465,7 @@ struct AnimatedTextConfigurationSections: View {
             .pickerStyle(.segmented)
             sidePicker("Path starts at", selection: $configuration.pathStart)
             slider("Path tip length", value: $configuration.pathBand, range: 0.02...0.5)
+            slider("Pen slant", value: $configuration.penSlant, range: 0...1)
             slider("Path tip glow", value: $configuration.pathGlow, range: 0...3)
         }
 

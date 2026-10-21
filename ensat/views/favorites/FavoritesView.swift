@@ -5,15 +5,31 @@
 //  Created by Mazen on 08/08/2026.
 //
 
+import OSLog
 import SwiftData
 import SwiftUI
 
 struct FavoritesView: View {
-    var playerState: PlayerState?
+    let playerState: PlayerState
 
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Query(sort: \FavoriteTrack.createdAt, order: .reverse) private var tracks: [FavoriteTrack]
     @Query(sort: \FavoriteReciter.createdAt, order: .reverse) private var reciters: [FavoriteReciter]
+    @Query private var downloads: [DownloadedTrack]
+
+    @State private var selectedTab: FavoritesTab = .surahs
+
+    private enum FavoritesTab: Hashable {
+        case surahs, reciters
+    }
+
+    /// The tab actually shown: falls back to whichever collection has items.
+    private var activeTab: FavoritesTab {
+        if tracks.isEmpty { return .reciters }
+        if reciters.isEmpty { return .surahs }
+        return selectedTab
+    }
 
     var body: some View {
         NavigationStack {
@@ -21,158 +37,201 @@ struct FavoritesView: View {
                 Color.homeBackground.ignoresSafeArea()
 
                 if tracks.isEmpty && reciters.isEmpty {
-                    ContentUnavailableView("No favorites now", systemImage: "heart.fill")
+                    ContentUnavailableView(
+                        "No Favorites", systemImage: "heart",
+                        description: Text("Tap the heart on a surah or reciter to save it here."))
                 } else {
-                    ContainerShapeView { _ in
-                        favoritesList(showsHeader: true)
-                    } wide: { size in
-                        HStack {
-                            ScrollView {
-                                header(iconSize: min(250, size.height * 0.45))
-                                    .padding(.vertical)
-                            }
-                            .scrollIndicators(.hidden)
-                            favoritesList(showsHeader: false)
-                                .padding(.top)
-                        }
-                    }
+                    favoritesList
                 }
             }
         }
     }
 
-    private func favoritesList(showsHeader: Bool) -> some View {
-        List {
-            if showsHeader {
-                header(iconSize: 250)
+    private var favoritesList: some View {
+        let surahsByID = surahsByID
+        let downloadCounts = DownloadedTrack.counts(in: downloads)
+        return List {
+            if activeTab == .surahs {
+                header
                     .listRowBackground(Color.clear)
                     .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
             }
-            if !tracks.isEmpty {
-                Section("Surahs") {
+            if activeTab == .surahs {
+                Section {
                     ForEach(tracks) { track in
                         let isSelected = isCurrent(track)
                         Button { play(track) } label: {
                             HStack(alignment: .center) {
-                                row(track, isSelected: isSelected)
+                                row(track, surah: surahsByID[track.surahId], isSelected: isSelected)
                                 Spacer()
                                 PlaybackIndicator(
                                     isSelected: isSelected,
-                                    isPlaying: isSelected && playerState?.isPlaying == true
+                                    isPlaying: isSelected && playerState.isPlaying
                                 )
                             }
                             .contentShape(Rectangle())
                         }
-                        .buttonStyle(.plain)
+                        .accessibilityAddTraits(isSelected ? .isSelected : [])
+                        .contextMenu {
+                            Button("Remove", systemImage: "heart.slash", role: .destructive) {
+                                delete([track])
+                            }
+                        }
                     }
                     .onDelete { offsets in delete(offsets.map { tracks[$0] }) }
                 }
             }
-            if !reciters.isEmpty {
-                Section("Reciters") {
+            if activeTab == .reciters {
+                Section {
                     ForEach(reciters) { reciter in
-                        Button { playerState?.selectReciter(reciter.item) } label: {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(reciter.reciterName).font(.headline)
-                                Text(reciter.moshafName)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
+                        let isSelected = playerState.selectedReciter.id == reciter.item.id
+                        Button { playerState.selectReciter(reciter.item) } label: {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(reciter.reciterName)
+                                        .font(.headline)
+                                        .foregroundStyle(isSelected ? Color.selectedText : .primary)
+                                    Text(reciter.moshafName)
+                                        .font(.subheadline)
+                                        .foregroundStyle(.gray)
+                                    DownloadedCountLabel(count: downloadCounts[reciter.item.id, default: 0])
+                                }
+                                Spacer()
+                                if isSelected {
+                                    Image(systemName: "checkmark")
+                                        .font(.subheadline.weight(.semibold))
+                                        .foregroundStyle(Color.selectedText)
+                                }
+                            }
+                            .contentShape(Rectangle())
+                        }
+                        .accessibilityAddTraits(isSelected ? .isSelected : [])
+                        .contextMenu {
+                            Button("Remove", systemImage: "heart.slash", role: .destructive) {
+                                delete([reciter])
                             }
                         }
-                        .buttonStyle(.plain)
                     }
                     .onDelete { offsets in delete(offsets.map { reciters[$0] }) }
                 }
             }
         }
         .scrollContentBackground(.hidden)
-    }
-
-    private func header(iconSize: CGFloat) -> some View {
-        VStack(spacing: 20) {
-            Image(systemName: "heart.fill")
-                .font(.system(size: iconSize * 0.52))
-                .foregroundStyle(.selectedText)
-                .frame(width: iconSize, height: iconSize)
-                .background(.selectedText.opacity(0.15), in: RoundedRectangle(cornerRadius: 32, style: .continuous))
-
-            HStack(spacing: 12) {
-                headerButton("Play", systemImage: "play.fill") { playAll(shuffled: false) }
-                headerButton("Shuffle", systemImage: "shuffle") { playAll(shuffled: true) }
+        .environment(\.defaultMinListRowHeight, 0)
+        .listSectionSpacing(activeTab == .reciters ? .custom(0) : .default)
+        .animation(reduceMotion ? nil : .smooth, value: activeTab)
+        .navigationTitle("Favorites")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            if !tracks.isEmpty && !reciters.isEmpty {
+                ToolbarItem(placement: .principal) {
+                    Picker("Favorites", selection: $selectedTab) {
+                        Text("Surahs").tag(FavoritesTab.surahs)
+                        Text("Reciters").tag(FavoritesTab.reciters)
+                    }
+                    .pickerStyle(.segmented)
+                    .frame(width: 240)
+                }
             }
         }
-        .frame(maxWidth: .infinity)
     }
 
-    private func headerButton(
-        _ title: LocalizedStringKey, systemImage: String, action: @escaping () -> Void
-    ) -> some View {
-        Button(action: action) {
-            Label(title, systemImage: systemImage)
-                .font(.headline)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
-                .foregroundStyle(.white)
-
+    private var header: some View {
+        ViewThatFits {
+            HStack(spacing: 12) { playButton; shuffleButton }
+            VStack(spacing: 12) { playButton; shuffleButton }
         }
-        .buttonStyle(.glass)
+        .controlSize(.large)
+        .fixedSize(horizontal: false, vertical: true)
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 4)
+        .padding(.vertical, 8)
+    }
 
-        .disabled(tracks.isEmpty)
+    private var playButton: some View {
+        Button { playAll(shuffled: false) } label: {
+            Label("Play", systemImage: "play.fill")
+                .font(.headline)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+                .frame(maxWidth: .infinity)
+                .foregroundStyle(.black)
+        }
+        .buttonStyle(.borderedProminent)
+    }
+
+    private var shuffleButton: some View {
+        Button { playAll(shuffled: true) } label: {
+            Label("Shuffle", systemImage: "shuffle")
+                .font(.headline)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+                .frame(maxWidth: .infinity)
+        }
+        .buttonStyle(.bordered)
     }
 
     private func isCurrent(_ track: FavoriteTrack) -> Bool {
-        playerState?.selectedSurah?.id == track.surahId && playerState?.selectedReciter.id == track.item.id
+        playerState.selectedSurah?.id == track.surahId && playerState.selectedReciter.id == track.item.id
     }
 
-    private func row(_ track: FavoriteTrack, isSelected: Bool) -> some View {
+    private func row(_ track: FavoriteTrack, surah: Surah?, isSelected: Bool) -> some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(surah(for: track)?.displayName ?? "Surah \(track.surahId)")
-                .font(.headline)
-                .foregroundStyle(isSelected ? Color.selectedText : .primary)
+            Group {
+                if let surah {
+                    Text(surah.displayName)
+                } else {
+                    Text("Surah \(track.surahId)")
+                }
+            }
+            .font(.headline)
+            .foregroundStyle(isSelected ? Color.candy : .primary)
             Text(track.reciterName)
-                .font(.caption)
-                .foregroundStyle(.secondary)
+                .font(.subheadline)
+                .foregroundStyle(.gray)
         }
     }
 
-    private func surah(for track: FavoriteTrack) -> Surah? {
-        playerState?.surahs.first { $0.id == track.surahId }
+    private var surahsByID: [Int: Surah] {
+        Dictionary(playerState.surahs.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
     }
 
     private func entries() -> [QueueEntry] {
-        tracks.compactMap { track in
-            surah(for: track).map { QueueEntry(surah: $0, reciter: track.item) }
-        }
+        tracks.queueEntries(surahs: playerState.surahs)
     }
 
     private func playAll(shuffled: Bool) {
         let queue = shuffled ? entries().shuffled() : entries()
-        playerState?.play(queue: queue)
+        playerState.play(queue: queue)
     }
 
     /// Plays from `track` onward through the favorites list.
     private func play(_ track: FavoriteTrack) {
         if isCurrent(track) {
-            playerState?.togglePlayPause()
+            playerState.togglePlayPause()
             return
         }
         let queue = entries()
-        guard let index = queue.firstIndex(where: {
-            $0.surah.id == track.surahId && $0.reciter.id == track.item.id
-        }) else { return }
-        playerState?.play(queue: queue, startAt: index)
+        guard let index = queue.queueIndex(of: track) else { return }
+        playerState.play(queue: queue, startAt: index)
     }
 
     private func delete<Model: PersistentModel>(_ models: [Model]) {
         models.forEach(modelContext.delete)
-        try? modelContext.save()
+        do {
+            try modelContext.save()
+        } catch {
+            Logger(subsystem: Bundle.main.bundleIdentifier ?? "ensat", category: "favorites")
+                .error("Failed to save after deleting favorites: \(error)")
+        }
     }
 }
 
 #Preview {
     // swiftlint:disable:next force_try
     let container = try! ModelContainer(
-        for: FavoriteTrack.self, FavoriteReciter.self,
+        for: FavoriteTrack.self, FavoriteReciter.self, DownloadedTrack.self,
         configurations: ModelConfiguration(isStoredInMemoryOnly: true)
     )
     let item = ReciterMoshafItem.make(
@@ -184,7 +243,7 @@ struct FavoritesView: View {
     container.mainContext.insert(FavoriteTrack(surahId: 1, item: item))
     container.mainContext.insert(FavoriteTrack(surahId: 18, item: item))
 
-    return FavoritesView()
+    return FavoritesView(playerState: PlayerState())
         .modelContainer(container)
         .preferredColorScheme(.dark)
 }

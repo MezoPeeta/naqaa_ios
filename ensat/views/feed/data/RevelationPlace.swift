@@ -1,6 +1,6 @@
 import Foundation
 
-enum RevelationPlace: String, Codable, CaseIterable {
+nonisolated enum RevelationPlace: String, Codable, CaseIterable {
     case meccan, medinan
 }
 

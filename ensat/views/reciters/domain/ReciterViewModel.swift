@@ -48,58 +48,100 @@ final class ReciterViewModel {
 
         private let session: URLSession
         private let endpoint: URL
+        private let cache: ReciterCatalogCache?
 
-        init(session: URLSession = .shared, endpoint: URL? = nil) {
+        // excludes old recitations
+        private nonisolated static let excludedItemIDs: Set<ReciterMoshafItem.ID> = ["112-112"]
+
+        init(
+            session: URLSession = .shared,
+            endpoint: URL? = nil,
+            cache: ReciterCatalogCache? = ReciterCatalogCache()
+        ) {
             self.session = session
             self.endpoint = endpoint ?? Self.defaultEndpoint
+            self.cache = cache
+        }
+
+        private static var languageCode: String {
+            Locale.current.language.languageCode?.identifier ?? "en"
         }
 
         private static var defaultEndpoint: URL {
-            let code = Locale.current.language.languageCode?.identifier ?? "en"
-            return URL(
-                string: "https://mp3quran.net/api/v3/reciters?language=\(code)"
+            URL(
+                string: "https://mp3quran.net/api/v3/reciters?language=\(languageCode)"
             )!
+        }
+
+        private nonisolated static func items(from data: Data) throws -> [ReciterMoshafItem] {
+            try JSONDecoder()
+                .decode(ReciterResponse.self, from: data)
+                .flatItems
+                .filter { !excludedItemIDs.contains($0.id) }
+        }
+
+        /// Reads and decodes the whole catalog off the main actor, so launch and the first tap on
+        /// "Change reciter" never wait on disk or JSON.
+        @concurrent
+        private static func loadFromCache(
+            _ cache: ReciterCatalogCache?, languageCode: String
+        ) async -> (items: [ReciterMoshafItem], isFresh: Bool)? {
+            guard let entry = cache?.read(languageCode: languageCode) else { return nil }
+            guard let items = try? items(from: entry.data) else {
+                cache?.remove(languageCode: languageCode)
+                return nil
+            }
+            return (items, entry.isFresh)
+        }
+
+        @concurrent
+        private static func decodeAndCache(
+            _ data: Data, cache: ReciterCatalogCache?, languageCode: String
+        ) async throws -> [ReciterMoshafItem] {
+            let items = try items(from: data)
+            cache?.write(data, languageCode: languageCode)
+            return items
+        }
+
+        private func loadFromNetwork() async throws -> [ReciterMoshafItem] {
+            let (data, response) = try await session.data(from: endpoint)
+
+            guard let http = response as? HTTPURLResponse,
+                  (200..<300).contains(http.statusCode)
+            else {
+                throw APIError.invalidRequest
+            }
+
+            return try await Self.decodeAndCache(data, cache: cache, languageCode: Self.languageCode)
         }
 
         func load() async {
             guard state == .idle else { return }
             state = .loading
 
+            let cached = await Self.loadFromCache(cache, languageCode: Self.languageCode)
+            if let cached, cached.isFresh {
+                state = .loaded(cached.items)
+                return
+            }
+
             do {
-                let (data, response) = try await session.data(
-                    from: endpoint
-                )
-
-                guard let http = response as? HTTPURLResponse,
-                      (200..<300).contains(http.statusCode)
-                else {
-                    throw APIError.invalidRequest
-                }
-
-                let decoded = try JSONDecoder().decode(
-                    ReciterResponse.self,
-                    from: data
-                )
-
-                state = .loaded(decoded.flatItems)
-                PostHogExportLogger.info(
-                    "Reciter catalog loaded",
-                    attributes: ["reciter_count": decoded.flatItems.count]
-                )
-            } catch let error as DecodingError {
-                PostHogExportLogger.warn(
-                    "Reciter catalog load failed",
-                    attributes: ["failure_kind": "decoding"]
-                )
-                state = .error(APIError.decoding(error).localizedDescription)
+                state = .loaded(try await loadFromNetwork())
             } catch {
+                let isDecoding = error is DecodingError
                 PostHogExportLogger.warn(
                     "Reciter catalog load failed",
-                    attributes: ["failure_kind": "network"]
+                    attributes: ["failure_kind": isDecoding ? "decoding" : "network"]
                 )
-                state = .error(
-                    APIError.networkError(error).localizedDescription
-                )
+                if let cached {
+                    state = .loaded(cached.items)
+                } else if let error = error as? DecodingError {
+                    state = .error(APIError.decoding(error).localizedDescription)
+                } else {
+                    state = .error(
+                        APIError.networkError(error).localizedDescription
+                    )
+                }
             }
         }
 
@@ -132,11 +174,11 @@ extension ReciterMoshafItem {
 
     var formattedMoshafName: String {
         var name = moshaf.name.replacingOccurrences(of: "A'n", with: "An")
-        name = name.replacingOccurrences(
-            of: #"^\s*Rewayat\s+"#,
-            with: "",
-            options: .regularExpression
-        )
+        // Drops a leading "Rewayat " without compiling a regex for every row on every redraw.
+        let leading = name.drop(while: \.isWhitespace)
+        if leading.hasPrefix("Rewayat"), leading.dropFirst("Rewayat".count).first?.isWhitespace == true {
+            name = String(leading.dropFirst("Rewayat".count))
+        }
         name = name.trimmingCharacters(in: .whitespacesAndNewlines)
 
         switch name.lowercased() {

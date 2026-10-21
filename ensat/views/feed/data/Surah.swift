@@ -1,6 +1,6 @@
 import Foundation
 
-struct Surah: Codable, Identifiable, Equatable {
+nonisolated struct Surah: Codable, Identifiable, Equatable {
     let id: Int
     let name: String
     let revelationPlace: RevelationPlace

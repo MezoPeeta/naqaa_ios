@@ -33,3 +33,20 @@ final class FavoriteTrack {
         )
     }
 }
+
+extension Sequence where Element == FavoriteTrack {
+    /// Play-queue entries for these favorites, in order. Tracks whose surah isn't in `surahs` are dropped.
+    func queueEntries(surahs: [Surah]) -> [QueueEntry] {
+        let byID = Dictionary(surahs.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
+        return compactMap { track in
+            byID[track.surahId].map { QueueEntry(surah: $0, reciter: track.item) }
+        }
+    }
+}
+
+extension Array where Element == QueueEntry {
+    /// Position of `track` in the queue, or nil when it isn't there.
+    func queueIndex(of track: FavoriteTrack) -> Int? {
+        firstIndex { $0.surah.id == track.surahId && $0.reciter.id == track.item.id }
+    }
+}

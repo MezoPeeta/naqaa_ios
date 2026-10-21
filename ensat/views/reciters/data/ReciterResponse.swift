@@ -1,10 +1,10 @@
 import Foundation
 
-struct ReciterResponse: Codable, Sendable, Equatable {
+nonisolated struct ReciterResponse: Codable, Sendable, Equatable {
     let reciters: [Reciter]
 }
 
-extension ReciterResponse {
+nonisolated extension ReciterResponse {
     var flatItems: [ReciterMoshafItem] {
         reciters.flatMap { reciter in
             reciter.moshaf.map { moshaf in

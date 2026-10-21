@@ -5,7 +5,7 @@ struct LanguagePickerSheet: View {
     @Environment(\.dismiss) private var dismiss
     @State private var pending: AppLanguage = .system
     var onConfirm: () -> Void = {}
-
+    
     var body: some View {
         NavigationStack {
             List(AppLanguage.allChoices, id: \.self) { option in
@@ -38,7 +38,7 @@ struct LanguagePickerSheet: View {
                     dismiss()
                     onConfirm()
                 } label: {
-                    Text("Confirm").font(.headline).frame(maxWidth: .infinity).padding(.vertical, 12)
+                    Text("Confirm").font(.headline).frame(maxWidth: .infinity).padding(.vertical, 12).foregroundStyle(.black)
                 }
                 .buttonStyle(.glassProminent)
                 .padding()
